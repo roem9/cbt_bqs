@@ -77,7 +77,7 @@
         </div>
     </div>
 
-    <div class="page page-center" id="transisi-sesi-3" style="display: nones">
+    <div class="page page-center" id="transisi-sesi-3" style="display: none">
         <div class="container-tight py-4">
             <div class="card">
                 <div class="card-body">
