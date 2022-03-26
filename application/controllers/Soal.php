@@ -108,6 +108,8 @@ class Soal extends CI_Controller {
                         $data['sesi'][$i]['soal'][$j]['data']['pilihan'] = $txt_soal['pilihan'];
                         $data['sesi'][$i]['soal'][$j]['data']['jawaban'] = $txt_soal['jawaban'];
                         $data['sesi'][$i]['soal'][$j]['penulisan'] = $soal['penulisan'];
+                        $data['sesi'][$i]['soal'][$j]['id_text'] = $soal['id_text'];
+                        $data['sesi'][$i]['soal'][$j]['tampil'] = $soal['tampil'];
                         
                         $number++;
 
@@ -115,7 +117,7 @@ class Soal extends CI_Controller {
                         $data['sesi'][$i]['soal'][$j] = $soal;
                     }
 
-                    $data['sesi'][$i]['jumlah_soal'] = COUNT($this->Main_model->get_all("item_soal", ["id_sub" => $sesi['id_sub'], "item" => "soal"]));
+                    $data['sesi'][$i]['jumlah_soal'] = COUNT($this->Main_model->get_all("item_soal", ["id_sub" => $sesi['id_sub']]));
                     $data['sesi'][$i]['id_sub'] = $sesi['id_sub'];
                 }
             }

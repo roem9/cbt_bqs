@@ -187,7 +187,7 @@
 
     function tablerIcon($icon, $margin = ""){
         return '
-            <svg width="24" height="24" class="alert-icon '.$margin.'">
+            <svg width="24" height="24" class="'.$margin.'">
                 <use xlink:href="'.base_url().'assets/tabler-icons-1.39.1/tabler-sprite.svg#tabler-'.$icon.'" />
             </svg>';
     }
@@ -213,5 +213,14 @@
         $CI =& get_instance();
         $CI->db->from("config");
         $data = $CI->db->get()->result_array();
+        return $data;
+    }
+
+    function textReading($id_item){
+        $CI =& get_instance();
+
+        $CI->db->from("item_soal");
+        $CI->db->where(["id_item" => $id_item]);
+        $data = $CI->db->get()->row_array();
         return $data;
     }
