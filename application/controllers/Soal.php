@@ -65,6 +65,43 @@ class Soal extends CI_Controller {
                         <textarea name=\"alamat\" class=\"form form-control required\"></textarea>
                         <label for=\"alamat\">Alamat</label>
                     </div>
+                    <div class=\"form-floating mb-3\">
+                        <input type=\"text\" name=\"medsos\" class=\"form form-control required\">
+                        <label for=\"medsos\">Akun Media Sosial</label>
+                    </div>
+                    <div class=\"form-floating mb-3\">
+                        <select name=\"info_tes\" class=\"form form-control required\">
+                            <option value=\"\">Pilih Sumber Informasi</option>
+                            <option value=\"Instagram (Media sosial)\">Instagram (Media sosial)</option>
+                            <option value=\"Rekomendasi teman\">Rekomendasi teman</option>
+                            <option value=\"Website COLORADO\">Website COLORADO</option>
+                            <option value=\"Booklet Pendaftaran TOEFL ITP Colorado\">Booklet Pendaftaran TOEFL ITP Colorado</option>
+                            <option value=\"Lainnya\">Lainnya</option>
+                        </select>
+                        <label for=\"info_tes\">Dari manakah anda mengetahui informasi TOEFL ITP Prediction?</label>
+                    </div>
+                    <div class=\"form-floating mb-3\">
+                        <select name=\"tujuan_tes\" class=\"form form-control required\">
+                            <option value=\"\">Pilih Tujuan</option>
+                            <option value=\"Persiapan Wisuda\"?>Persiapan Wisuda</option>
+                            <option value=\"Pemberkasan CPNS / Kerja\"?>Pemberkasan CPNS / Kerja</option>
+                            <option value=\"Latihan sebelum mengikuti Real Test TOEFL ITP\"?>Latihan sebelum mengikuti Real Test TOEFL ITP</option>
+                            <option value=\"Memprediksi skor TOEFL ITP \"?>Memprediksi skor TOEFL ITP </option>
+                            <option value=\"Lainnya\"?>Lainnya</option>
+                        </select>
+                        <label for=\"tujuan_tes\">Apakah alasan anda mengambil ujian TOEFL ITP Prediction?</label>
+                    </div>
+                    <div class=\"form-floating mb-3\">
+                        <select name=\"pendidikan\" class=\"form form-control required\">
+                            <option value=\"\">Pilih Tingkat Pendidikan</option>
+                            <option value=\"Sekolah Menengah\">Sekolah Menengah</option>
+                            <option value=\"Diploma - S1\">Diploma - S1</option>
+                            <option value=\"S2\">S2</option>
+                            <option value=\"S3\">S3</option>
+                            <option value=\"Lainnya\">Lainnya</option>
+                        </select>
+                        <label for=\"pendidikan\">Apakah tingkat pendidikan anda sekarang?</label>
+                    </div>
                 ";
             } else {
                 $data['table'] = "peserta";
@@ -83,7 +120,7 @@ class Soal extends CI_Controller {
             $data['tes'] = $tes;
             $data['soal'] = $soal;
             foreach ($sesi as $i => $sesi) {
-                $sub_soal = $this->Main_model->get_all("item_soal", ["id_sub" => $sesi['id_sub']], 'urutan');
+                $sub_soal = $this->Main_model->get_all("item_soal", ["id_sub" => $sesi['id_sub'], "tampil" => "Ya"], 'urutan');
                 $data['sesi'][$i] = [];
                 $number = 1;
                 foreach ($sub_soal as $j => $soal) {
@@ -117,7 +154,7 @@ class Soal extends CI_Controller {
                         $data['sesi'][$i]['soal'][$j] = $soal;
                     }
 
-                    $data['sesi'][$i]['jumlah_soal'] = COUNT($this->Main_model->get_all("item_soal", ["id_sub" => $sesi['id_sub']]));
+                    $data['sesi'][$i]['jumlah_soal'] = COUNT($this->Main_model->get_all("item_soal", ["id_sub" => $sesi['id_sub'], "tampil" => "Ya"]));
                     $data['sesi'][$i]['id_sub'] = $sesi['id_sub'];
                 }
             }
@@ -221,6 +258,13 @@ class Soal extends CI_Controller {
             "no_wa" => $this->input->post("no_wa"),
             "email" => $this->input->post("email"),
             "jk" => $this->input->post("jk"),
+            "tujuan_tes" => $this->input->post("tujuan_tes"),
+            "info_tes" => $this->input->post("info_tes"),
+            "medsos" => $this->input->post("medsos"),
+            "pendidikan" => $this->input->post("pendidikan"),
+            "waktu_mulai" => $this->input->post("waktu_mulai"),
+            "sisa_waktu_structure" => $this->input->post("sisa_waktu_structure"),
+            "sisa_waktu_reading" => $this->input->post("sisa_waktu_reading"),
             "nilai_listening" => $nilai_listening,
             "nilai_structure" => $nilai_structure,
             "nilai_reading" => $nilai_reading,

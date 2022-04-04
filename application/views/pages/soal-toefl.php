@@ -108,6 +108,9 @@
                         <div class="row row-cards FieldContainer" data-masonry='{"percentPosition": true }'>
                             <?php if($soal['tipe_soal'] == "TOAFL" || $soal['tipe_soal'] == "TOEFL") :?>
                                 <form action="<?= base_url()?>soal/add_jawaban_toefl" method="post" id="formSoal">
+                                <input type="text" name="waktu_mulai" id="">
+                                <input type="text" name="sisa_waktu_structure" value="00:00">
+                                <input type="text" name="sisa_waktu_reading" value="00:00">
                             <?php else :?>
                                 <form action="<?= base_url()?>soal/add_jawaban" method="post" id="formSoal">
                             <?php endif;?>
@@ -288,14 +291,14 @@
                                                 <?php $jumlah_soal = $sesi[1]['jumlah_soal'] - 1;?>
 
                                                 <?php if($i == 0) : ?>
-                                                    <div class="d-flex justify-content-end">
-                                                        <a class="btn btn-sm btn-success btnNextStructure" data-id="soal-2-<?= $i+1?>">
+                                                    <div class="d-flex justify-content-center">
+                                                        <a class="btn btn-sm btn-success me-3 btnNextStructure" data-id="soal-2-<?= $i+1?>">
                                                             <?= tablerIcon("arrow-right");?>
                                                         </a>
                                                     </div>
                                                 <?php elseif($i == $jumlah_soal) :?>
-                                                    <div class="d-flex justify-content-between">
-                                                        <a class="btn btn-sm btn-success btnBackStructure" data-id="soal-2-<?= $i-1?>">
+                                                    <div class="d-flex justify-content-center">
+                                                        <a class="btn btn-sm btn-success me-3 btnBackStructure" data-id="soal-2-<?= $i-1?>">
                                                             <?= tablerIcon("arrow-left");?>
                                                         </a>
                                                         
@@ -307,8 +310,8 @@
                                                         </button>
                                                     </div>
                                                 <?php else :?>
-                                                    <div class="d-flex justify-content-between">
-                                                        <a class="btn btn-sm btn-success btnBackStructure" data-id="soal-2-<?= $i-1?>">
+                                                    <div class="d-flex justify-content-center">
+                                                        <a class="btn btn-sm btn-success me-3 btnBackStructure" data-id="soal-2-<?= $i-1?>">
                                                             <?= tablerIcon("arrow-left");?>
                                                         </a>
         
@@ -348,7 +351,6 @@
                                     </div>
     
                                     <?php 
-                                        // $i = 0;
                                         foreach ($sesi[2]['soal'] as $i => $data) :
                                         $item = "";
     
@@ -426,14 +428,14 @@
                                                     <?php $jumlah_soal = $sesi[2]['jumlah_soal'] - 1;?>
 
                                                     <?php if($i == 0) : ?>
-                                                        <div class="d-flex justify-content-end">
-                                                            <a class="btn btn-sm btn-success btnNextReading" data-id="soal-3-<?= $i+1?>">
+                                                        <div class="d-flex justify-content-center">
+                                                            <a class="btn btn-sm btn-success me-3 btnNextReading" data-id="soal-3-<?= $i+1?>">
                                                                 <?= tablerIcon("arrow-right");?>
                                                             </a>
                                                         </div>
                                                     <?php elseif($i == $jumlah_soal) :?>
-                                                        <div class="d-flex justify-content-between">
-                                                            <a class="btn btn-sm btn-success btnBackReading" data-id="soal-3-<?= $i-1?>">
+                                                        <div class="d-flex justify-content-center">
+                                                            <a class="btn btn-sm btn-success me-3 btnBackReading" data-id="soal-3-<?= $i-1?>">
                                                                 <?= tablerIcon("arrow-left");?>
                                                             </a>
                                                             
@@ -445,8 +447,8 @@
                                                             </button>
                                                         </div>
                                                     <?php else :?>
-                                                        <div class="d-flex justify-content-between">
-                                                            <a class="btn btn-sm btn-success btnBackReading" data-id="soal-3-<?= $i-1?>">
+                                                        <div class="d-flex justify-content-center">
+                                                            <a class="btn btn-sm btn-success me-3 btnBackReading" data-id="soal-3-<?= $i-1?>">
                                                                 <?= tablerIcon("arrow-left");?>
                                                             </a>
             
@@ -458,9 +460,7 @@
         
                                                 </div>
                                             </div>
-                                        <?php 
-                                            $i++;
-                                            endif;?>
+                                        <?php endif;?>
 
                                     <?php endforeach;?>
                                 </div>
@@ -653,11 +653,13 @@
                         $("#nomor-sesi-2").show();
 
                         sec = 25 * 60;
+                        // sec = 1 * 60;
                     } else if(id == 'sesi-3'){
                         $("#soal-3-0").show();
                         $("#nomor-sesi-3").show();
 
                         sec = 55 * 60;
+                        // sec = 1 * 60;
                     }
 
                     countDiv = document.getElementById("waktu"),
@@ -732,6 +734,16 @@
                                 cancelButtonText: 'Tidak'
                             }).then(function (result) {
                                 if (result.value) {
+                                    var currentdate = new Date(); 
+                                    // var datetime = currentdate.getHours() + ":" + currentdate.getMinutes();
+                                    var datetime = currentdate.getDate() + "/"
+                                    + (currentdate.getMonth()+1)  + "/" 
+                                    + currentdate.getFullYear() + " @ "  
+                                    + currentdate.getHours() + ":"  
+                                    + currentdate.getMinutes() + ":" 
+                                    + currentdate.getSeconds();
+
+                                    $("[name='waktu_mulai'").val(datetime);
                                     $("#soal_tes").hide();
 
                                     // hide all id 
@@ -760,63 +772,40 @@
             sesi = id.replace("sesi-", "");
             sesi = parseInt(sesi-1);
 
-            // if($('#sesi-'+sesi+' input:radio:checked').length != jumlah_soal){
-            
-            //     $.each($("#sesi-"+sesi+" [name='jawaban_sesi_"+sesi+"[]']"), function(){
-            //         index = $(this).data("id");
-            //         $("#sesi-"+sesi+" #"+index).removeClass("list-group-item-danger")
-
-            //         if($(this).val() == "null"){
-            //             $("#sesi-"+sesi+" #"+index).addClass("list-group-item-danger")
-            //         }
-            //     })
-
-            //     Swal.fire({
-            //         icon: 'error',
-            //         title: 'Oops...',
-            //         text: 'Anda belum menyelesaikan soal pada sesi ini',
-            //     })
-            // } else {
-                // $.each($("#sesi-"+sesi+" [name='jawaban_sesi_"+sesi+"[]']"), function(){
-                //     index = $(this).data("id");
-                //     $("#sesi-"+sesi+" #"+index).removeClass("list-group-item-danger")
-
-                //     if($(this).val() == "null"){
-                //         $("#sesi-"+sesi+" #"+index).addClass("list-group-item-danger")
-                //     }
-                // })
-
-                Swal.fire({
-                    icon: 'question',
-                    html: 'Yakin akan pindah ke sesi selanjutnya?<br><small style="font-size: 0.70em" class="form-text text-danger">Anda tidak akan bisa kembali ke sesi ini</small>',
-                    showCloseButton: true,
-                    showCancelButton: true,
-                    confirmButtonText: 'Ya',
-                    cancelButtonText: 'Tidak'
-                }).then(function (result) {
-                    if (result.value) {
-                        if(typeof countDown != 'undefined'){
-                            clearInterval(countDown);
-                        }
-
-                        $("#soal_tes").hide();
-
-                        // hide all id 
-                        $("div[id^='sesi-'").hide();
-                        $("div[id^='transisi-'").hide();
-
-                        // show sesi 
-                        $("#transisi-"+id).show();
-
-                        // scroll to top 
-                        if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-                            $([document.documentElement, document.body]).animate({
-                                scrollTop: $("#elementtoScrollToID").offset().top
-                            }, 1000);
-                        }
+            Swal.fire({
+                icon: 'question',
+                html: 'Yakin akan pindah ke sesi selanjutnya?<br><small style="font-size: 0.70em" class="form-text text-danger">Anda tidak akan bisa kembali ke sesi ini</small>',
+                showCloseButton: true,
+                showCancelButton: true,
+                confirmButtonText: 'Ya',
+                cancelButtonText: 'Tidak'
+            }).then(function (result) {
+                if (result.value) {
+                    if(typeof countDown != 'undefined'){
+                        clearInterval(countDown);
                     }
-                })
-            // }
+
+                    if(id == 'sesi-3'){
+                        $("[name='sisa_waktu_structure'").val($("#waktu").html());
+                    }
+
+                    $("#soal_tes").hide();
+
+                    // hide all id 
+                    $("div[id^='sesi-'").hide();
+                    $("div[id^='transisi-'").hide();
+
+                    // show sesi 
+                    $("#transisi-"+id).show();
+
+                    // scroll to top 
+                    if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                        $([document.documentElement, document.body]).animate({
+                            scrollTop: $("#elementtoScrollToID").offset().top
+                        }, 1000);
+                    }
+                }
+            })
         }
     })
     
@@ -832,49 +821,33 @@
 
         sesi = id.replace("sesi-", "");
         sesi = parseInt(sesi-1);
+  
+        Swal.fire({
+            icon: 'question',
+            html: 'Yakin telah menyelesaikan tes Anda?',
+            showCloseButton: true,
+            showCancelButton: true,
+            confirmButtonText: 'Ya',
+            cancelButtonText: 'Tidak'
+        }).then(function (result) {
+            if (result.value) {
+                $("[name='sisa_waktu_reading'").val($("#waktu").html());
 
-        // if($('#sesi-'+sesi+' input:radio:checked').length != jumlah_soal){
-        
-        //     $.each($("#sesi-"+sesi+" [name='jawaban_sesi_"+sesi+"[]']"), function(){
-        //         index = $(this).data("id");
-        //         $("#sesi-"+sesi+" #"+index).removeClass("list-group-item-danger")
+                swal.fire({
+                    html: '<h4>Menyimpan Jawaban Anda ...</h4>',
+                    allowOutsideClick: false,
+                    showConfirmButton: false,
+                    onBeforeOpen: () => {
+                        Swal.showLoading()
+                    },
+                });
 
-        //         if($(this).val() == "null"){
-        //             $("#sesi-"+sesi+" #"+index).addClass("list-group-item-danger")
-        //         }
-        //     })
-
-        //     Swal.fire({
-        //         icon: 'error',
-        //         title: 'Oops...',
-        //         text: 'Anda belum menyelesaikan soal pada sesi ini',
-        //     })
-        // } else {
-            Swal.fire({
-                icon: 'question',
-                html: 'Yakin telah menyelesaikan tes Anda?',
-                showCloseButton: true,
-                showCancelButton: true,
-                confirmButtonText: 'Ya',
-                cancelButtonText: 'Tidak'
-            }).then(function (result) {
-                if (result.value) {
-                    swal.fire({
-                        html: '<h4>Menyimpan Jawaban Anda ...</h4>',
-                        allowOutsideClick: false,
-                        showConfirmButton: false,
-                        onBeforeOpen: () => {
-                            Swal.showLoading()
-                        },
-                    });
-
-                    $(".btnSimpan").html("Menyimpan...");
-                    $(".btnSimpan").prop("disabled", true);
-                    $(".btnBack").prop("disabled", true);
-                    $("#formSoal").submit()
-                }
-            })
-        // }
+                $(".btnSimpan").html("Menyimpan...");
+                $(".btnSimpan").prop("disabled", true);
+                $(".btnBack").prop("disabled", true);
+                $("#formSoal").submit()
+            }
+        })
     })
 
     function secpass(id) {
