@@ -108,9 +108,9 @@
                         <div class="row row-cards FieldContainer" data-masonry='{"percentPosition": true }'>
                             <?php if($soal['tipe_soal'] == "TOAFL" || $soal['tipe_soal'] == "TOEFL") :?>
                                 <form action="<?= base_url()?>soal/add_jawaban_toefl" method="post" id="formSoal">
-                                <input type="text" name="waktu_mulai" id="">
-                                <input type="text" name="sisa_waktu_structure" value="00:00">
-                                <input type="text" name="sisa_waktu_reading" value="00:00">
+                                <input type="hidden" name="waktu_mulai" id="">
+                                <input type="hidden" name="sisa_waktu_structure" value="00:00">
+                                <input type="hidden" name="sisa_waktu_reading" value="00:00">
                             <?php else :?>
                                 <form action="<?= base_url()?>soal/add_jawaban" method="post" id="formSoal">
                             <?php endif;?>
@@ -652,14 +652,14 @@
                         $("#soal-2-0").show();
                         $("#nomor-sesi-2").show();
 
-                        sec = 25 * 60;
-                        // sec = 1 * 60;
+                        // sec = 25 * 60;
+                        sec = 3 * 60;
                     } else if(id == 'sesi-3'){
                         $("#soal-3-0").show();
                         $("#nomor-sesi-3").show();
 
-                        sec = 55 * 60;
-                        // sec = 1 * 60;
+                        // sec = 55 * 60;
+                        sec = 3 * 60;
                     }
 
                     countDiv = document.getElementById("waktu"),
