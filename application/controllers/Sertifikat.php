@@ -32,7 +32,7 @@ class Sertifikat extends CI_Controller {
             $skor = ((poin("Listening", $peserta['nilai_listening']) + poin("Structure", $peserta['nilai_structure']) + poin("Reading", $peserta['nilai_reading'])) * 10) / 3;
             $peserta['skor'] = $skor;
 
-            $peserta['no_doc'] = "{$peserta['no_doc']}/TFL/BKL/{$tahun}";
+            $peserta['no_doc'] = "{$peserta['no_doc']}/TFL/BKL/{$peserta['tahun']}";
         }
 
         // $this->load->view("pages/layout/header-sertifikat", $peserta);
@@ -59,7 +59,7 @@ class Sertifikat extends CI_Controller {
 
         $skor = round($skor);
         
-        $peserta['no_doc'] = "{$peserta['no_doc']}/TFL/BKL/{$tahun}";
+        $peserta['no_doc'] = "{$peserta['no_doc']}/TFL/BKL/{$peserta['tahun']}";
 
         $peserta['config'] = $this->Main_model->config();
         $peserta['id_tes'] = $peserta['id_tes'];
