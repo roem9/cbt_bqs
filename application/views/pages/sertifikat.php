@@ -35,7 +35,7 @@
                                                 Tgl Tes : <?= tgl_indo($tgl_tes)?><br>
                                                 Berlaku Sampai : <?= tgl_indo($tgl_berakhir)?>
                                             </p>
-                                            <p><small class="text-danger"><i>Catatan : Data diatas adalah data tes TOEFL peserta yang sebenar-benarnya. Dan tidak ada pengurangan dan penambahan nilai sedikitpun</i></small></p>
+                                            <p><small class="text-danger"><i>Catatan : Peserta di atas telah mengikuti TOEFL ITP Prediction yang dilaksanakan secara online. Ujian tersebut tidak berafiliasi dengan  Educational Testing Service (ETS).</i></small></p>
                                         </div>
                                     </div>
                                 <?php else :?>
