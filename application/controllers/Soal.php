@@ -147,6 +147,7 @@ class Soal extends CI_Controller {
                         $data['sesi'][$i]['soal'][$j]['penulisan'] = $soal['penulisan'];
                         $data['sesi'][$i]['soal'][$j]['id_text'] = $soal['id_text'];
                         $data['sesi'][$i]['soal'][$j]['tampil'] = $soal['tampil'];
+                        $data['sesi'][$i]['soal'][$j]['waktu_soal'] = $soal['waktu_soal'];
                         
                         $number++;
 

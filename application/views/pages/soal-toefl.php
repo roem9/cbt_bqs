@@ -198,7 +198,7 @@
                                                     ';
                                         ?>
                                         <?php endif;?>
-                                        <div class="shadow card mb-3 soalListening" id="soal-1-<?= $i?>" style="display: none">
+                                        <div class="shadow card mb-3 soalListening" data-time="<?= $data['waktu_soal']?>" id="soal-1-<?= $i?>" style="display: none">
                                             <div class="card-body <?= $padding?>" id="soal-<?= $i?>">
                                                 
                                                 <?= $item?>
@@ -542,10 +542,14 @@
         $(".audio")[0].play();
         $("#soal-1-1").show();
 
+        time = $("#soal-1-1").data("time");
+
         i = 2;
         var intervalId = window.setInterval(function(){
             $(".soalListening").hide();
             $("#soal-1-"+i).show();
+
+            time = $("#soal-1-"+i).data("time");
             
             if(i == jumlah_soal_listening){
                 clearInterval(intervalId) 
@@ -553,7 +557,7 @@
             }
 
             i++;
-        }, 1000);
+        }, time * 1000);
     }
 
     $(window).on('load', function (e) {
