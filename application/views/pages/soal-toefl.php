@@ -536,30 +536,6 @@
         })
     // reading 
 
-    var jumlah_soal_listening = <?= $sesi[0]['jumlah_soal']?>;
-
-    function soalListening(){
-        $(".audio")[0].play();
-        $("#soal-1-1").show();
-
-        time = $("#soal-1-1").data("time");
-
-        i = 2;
-        var intervalId = window.setInterval(function(){
-            $(".soalListening").hide();
-            $("#soal-1-"+i).show();
-
-            time = $("#soal-1-"+i).data("time");
-            
-            if(i == jumlah_soal_listening){
-                clearInterval(intervalId) 
-                $("#transisi-sesi-2").show();
-            }
-
-            i++;
-        }, time * 1000);
-    }
-
     $(window).on('load', function (e) {
         $(".btnSignIn").show()
     })
@@ -656,14 +632,14 @@
                         $("#soal-2-0").show();
                         $("#nomor-sesi-2").show();
 
-                        // sec = 25 * 60;
-                        sec = 3 * 60;
+                        sec = 25 * 60;
+                        // sec = 3 * 60;
                     } else if(id == 'sesi-3'){
                         $("#soal-3-0").show();
                         $("#nomor-sesi-3").show();
 
-                        // sec = 55 * 60;
-                        sec = 3 * 60;
+                        sec = 55 * 60;
+                        // sec = 3 * 60;
                     }
 
                     countDiv = document.getElementById("waktu"),
@@ -673,7 +649,9 @@
                         secpass(id);
                     }, 1000);
                 } else {
-                    soalListening();
+                    $(".audio")[0].play();
+                    // soal_listening(1);
+                    myFunction(1)
                 }
 
                 // hide all id 
@@ -692,6 +670,23 @@
             }
         })
     })
+
+    var jumlah_soal_listening = <?= $sesi[0]['jumlah_soal']?>;
+
+    function myFunction(indeks) {
+        $(".soalListening").hide();
+        $("#soal-1-"+indeks).show();
+        
+        time = $("#soal-1-"+indeks).data("time");
+
+        if(indeks == jumlah_soal_listening){
+            $("#transisi-sesi-2").show();
+        } else {
+            indeks++;
+            setTimeout(myFunction, time * 1000, indeks)
+        }
+
+    }
 
     var click = false;
     $(".btnNext").click(function(){
