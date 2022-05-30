@@ -65,12 +65,12 @@ class Soal extends CI_Controller {
                         <textarea name=\"alamat\" class=\"form form-control required\"></textarea>
                         <label for=\"alamat\">Alamat</label>
                     </div>
-                    <div class=\"form-floating mb-3\">
-                        <input type=\"text\" name=\"medsos\" class=\"form form-control required\">
+                    <div class=\"form-floating mb-3\" style=\"display:none\">
+                        <input type=\"text\" name=\"medsos\" class=\"form form-control\">
                         <label for=\"medsos\">Akun Media Sosial</label>
                     </div>
-                    <div class=\"form-floating mb-3\">
-                        <select name=\"info_tes\" class=\"form form-control required\">
+                    <div class=\"form-floating mb-3\" style=\"display:none\">
+                        <select name=\"info_tes\" class=\"form form-control\">
                             <option value=\"\">Pilih Sumber Informasi</option>
                             <option value=\"Instagram (Media sosial)\">Instagram (Media sosial)</option>
                             <option value=\"Rekomendasi teman\">Rekomendasi teman</option>
@@ -80,8 +80,8 @@ class Soal extends CI_Controller {
                         </select>
                         <label for=\"info_tes\">Dari manakah anda mengetahui informasi TOEFL ITP Prediction?</label>
                     </div>
-                    <div class=\"form-floating mb-3\">
-                        <select name=\"tujuan_tes\" class=\"form form-control required\">
+                    <div class=\"form-floating mb-3\" style=\"display:none\">
+                        <select name=\"tujuan_tes\" class=\"form form-control\">
                             <option value=\"\">Pilih Tujuan</option>
                             <option value=\"Persiapan Wisuda\"?>Persiapan Wisuda</option>
                             <option value=\"Pemberkasan CPNS / Kerja\"?>Pemberkasan CPNS / Kerja</option>
@@ -91,8 +91,8 @@ class Soal extends CI_Controller {
                         </select>
                         <label for=\"tujuan_tes\">Apakah alasan anda mengambil ujian TOEFL ITP Prediction?</label>
                     </div>
-                    <div class=\"form-floating mb-3\">
-                        <select name=\"pendidikan\" class=\"form form-control required\">
+                    <div class=\"form-floating mb-3\" style=\"display:none\">
+                        <select name=\"pendidikan\" class=\"form form-control\">
                             <option value=\"\">Pilih Tingkat Pendidikan</option>
                             <option value=\"Sekolah Menengah\">Sekolah Menengah</option>
                             <option value=\"Diploma - S1\">Diploma - S1</option>

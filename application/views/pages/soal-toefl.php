@@ -415,10 +415,10 @@
                                                 <?php if($data['id_text'] != 0) :?>
                                                     <?php $text = textReading($data['id_text']) ;?>
                                                     <div class="row">
-                                                        <div class="col-9">
+                                                        <div class="col-sm-12 col-lg-8">
                                                             <?= $text['data'];?>
                                                         </div>
-                                                        <div class="col-3">
+                                                        <div class="col-sm-12 col-lg-4">
                                                             <?= $item?>
                                                         </div>
                                                     </div>
