@@ -13,7 +13,7 @@
                                     <div class="card shadow mb-4">
                                         <div class="card-body text-gray-900">
                                             <center>
-                                                <img src="<?= $link_foto[0]['value']?>/assets/img/logo.png?t=<?= time()?>" width=150 class="img-fluid mb-3" alt="">
+                                                <img src="<?= $link['value']?>/assets/img/logo.png?t=<?= time()?>" width=150 class="img-fluid mb-3" alt="">
                                             </center>
                                         <!-- </div>
                                         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between"> -->
@@ -29,11 +29,10 @@
                                                 Nilai Listening : <?= $istima?><br>
                                                 Nilai Structure : <?= $tarakib?><br>
                                                 Nilai Reading : <?= $qiroah?><br>
-                                                Skor TOEFL : <?= round($skor)?>
+                                                Skor TOEFL : <?= $skor_toefl?>
                                             </p>
                                             <p>
-                                                Tgl Tes : <?= tgl_indo($tgl_tes)?><br>
-                                                Berlaku Sampai : <?= tgl_indo($tgl_berakhir)?>
+                                                Tgl Tes : <?= tgl_indo(date("Y-m-d", strtotime($tgl_tes)))?><br>
                                             </p>
                                             <p><small class="text-danger"><i>Catatan : Peserta di atas telah mengikuti TOEFL ITP Prediction yang dilaksanakan secara online. Ujian tersebut tidak berafiliasi dengan  Educational Testing Service (ETS).</i></small></p>
                                         </div>

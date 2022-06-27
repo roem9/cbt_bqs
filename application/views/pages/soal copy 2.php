@@ -4,33 +4,54 @@
             <div class="card">
                 <div class="card-body">
                     <div class="text-center mb-4">
-                        <a href="javascript:void()"><img src="<?= $link['value']?>/assets/img/logo.png" height="80" alt=""></a>
+                        <a href="javascript:void()"><img src="<?= base_url()?>/assets/img/<?= $tes['penyelenggara']?>.png" height="80" alt=""></a>
                     </div>
                     <h2 class="card-title text-center mb-4"><?= $title?></h2>
                     <?php if( $this->session->flashdata('pesan') ) : ?>
                         <?= $this->session->flashdata('pesan')?>
                     <?php else: ?>
-                        <div class="mb-2">
-                            <label class="form-label">
-                            Password
-                            </label>
-                            <div class="input-group input-group-flat">
-                            <input type="password" name="password" class="form-control"  placeholder="Password"  autocomplete="off">
-                            <span class="input-group-text">
-                                <a href="javascript:void(0)" class="link-secondary" title="Show password" data-bs-toggle="tooltip">
-                                <svg width="24" height="24" id="showPassword">
-                                    <use xlink:href="<?= base_url()?>assets/tabler-icons-1.39.1/tabler-sprite.svg#tabler-eye" />
-                                </svg>
-                                <svg width="24" height="24" id="hidePassword" style="display:none">
-                                    <use xlink:href="<?= base_url()?>assets/tabler-icons-1.39.1/tabler-sprite.svg#tabler-eye-off" />
-                                </svg>
-                                </a>
-                            </span>
+                        <?php
+                            $time = $tes['jam_mulai'];
+                            $time_now = date("H");
+
+                            if($time_now >= $time ) :
+                        ?>
+                            <div class="mb-2">
+                                <label class="form-label">
+                                Password
+                                </label>
+                                <div class="input-group input-group-flat">
+                                <input type="password" name="password" class="form-control"  placeholder="Password"  autocomplete="off">
+                                <span class="input-group-text">
+                                    <a href="javascript:void(0)" class="link-secondary" title="Show password" data-bs-toggle="tooltip">
+                                    <svg width="24" height="24" id="showPassword">
+                                        <use xlink:href="<?= base_url()?>assets/tabler-icons-1.39.1/tabler-sprite.svg#tabler-eye" />
+                                    </svg>
+                                    <svg width="24" height="24" id="hidePassword" style="display:none">
+                                        <use xlink:href="<?= base_url()?>assets/tabler-icons-1.39.1/tabler-sprite.svg#tabler-eye-off" />
+                                    </svg>
+                                    </a>
+                                </span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-footer">
-                            <button type="button" class="btn btn-primary w-100 btnSignIn">Masuk</button>
-                        </div>
+                            <div class="form-footer">
+                                <button type="button" class="btn btn-primary w-100 btnSignIn">Masuk</button>
+                            </div>
+                        <?php else :?>
+                            <p>Tes TOEFL akan dimulai,</p>
+                            <p>
+                                Hari : <?= hari_ini(date("D", strtotime($tes['tgl_tes'])))?><br>
+                                Tanggal : <?= tgl_indo(date("Y-m-d", strtotime($tes['tgl_tes'])))?><br>
+                                Pukul : <?= $time.":00"?> WIB
+                            </p>
+                            <p>
+                                Note : <br>
+                                - Durasi Pengerjaan 130 Menit <br>
+                                - Pastikan data diisi dengan benar <br>
+                            </p>
+                            <p><center><i><b>TES AKAN AKTIF SESUAI WAKTU DIATAS</b></i></center></p>
+
+                        <?php endif;?>
                     <?php endif;?>
                 </div>
             </div>
@@ -47,6 +68,8 @@
                         <div class="row row-cards FieldContainer" data-masonry='{"percentPosition": true }'>
                             <?php if($soal['tipe_soal'] == "TOAFL" || $soal['tipe_soal'] == "TOEFL") :?>
                                 <form action="<?= base_url()?>soal/add_jawaban_toefl" method="post" id="formSoal">
+                            <?php elseif($soal['tipe_soal'] == "IELTS") :?>
+                                <form action="<?= base_url()?>soal/add_jawaban_ielts" method="post" id="formSoal">
                             <?php else :?>
                                 <form action="<?= base_url()?>soal/add_jawaban" method="post" id="formSoal">
                             <?php endif;?>
@@ -79,7 +102,7 @@
                                     <div id="sesi-<?=$index?>" style="display: none">
 
                                         <div class="form-floating mb-3">
-                                            <select name="fontSize" class="form-control required">
+                                            <select name="fontSize" class="form-control">
                                                 <option value="">Pilih Ukuran Tulisan</option>
                                                 <option value="">Default</option>
                                                 <option value="20px">20px</option>
@@ -142,12 +165,11 @@
                                         <input type="hidden" name="kunci_sesi[]" value="<?= $sesi['id_sub']?>">
                                         <?php foreach ($sesi['soal'] as $i => $data) :
                                             $item = "";
-                                            $padding = "";
                                             ?>
                                             <?php if($data['item'] == "soal") :?>
                                                 <?php if($data['penulisan'] == "RTL") :?>
                                                     <?php $soal = '<div dir="rtl" class="mb-3">'.$data['data']['soal'].'</div>' ?>
-                                                    <input type="hidden" name="jawaban_sesi_<?= $index?>[]" data-id="soal-<?= $i?>" id="jawaban_sesi_<?= $index?><?= $i?>" value="null">
+                                                    <input type="hidden" name="jawaban_sesi_<?= $index?>[]" class="required" data-id="soal-<?= $i?>" id="jawaban_sesi_<?= $index?><?= $i?>" value="null">
                                                     <?php $pilihan = "";?>
                                                     <?php foreach ($data['data']['pilihan'] as $k => $choice) :?>
                                                         <?php $pilihan .= '
@@ -156,7 +178,7 @@
                                                                     <div class="text-right" dir="rtl">
                                                                         <label>
                                                                             <input type="radio" data-id="'.$index.'|'.$i.'"  name="radio-'.$index.'['.$i.']" value="'.$choice.'"> 
-                                                                            <span>'.$choice.'</span>
+                                                                            '.$choice.'
                                                                         </label>
                                                                     </div>
                                                                 </div>
@@ -165,18 +187,38 @@
                                                     <?php $item = $soal.$pilihan;?>
                                                 <?php else :?>
                                                     <?php $soal = '<div class="mb-3">'.$data['data']['soal'].'</div>' ?>
-                                                    <input type="hidden" name="jawaban_sesi_<?= $index?>[]" data-id="soal-<?= $i?>" id="jawaban_sesi_<?= $index?><?= $i?>" value="null">
+                                                    <input type="hidden" name="jawaban_sesi_<?= $index?>[]" class="required" data-id="soal-<?= $i?>" id="jawaban_sesi_<?= $index?><?= $i?>" value="null">
                                                     <?php $pilihan = "";?>
                                                     <?php foreach ($data['data']['pilihan'] as $k => $choice) :?>
                                                         <?php $pilihan .= '
                                                             <div class="mb-3">
                                                                 <label>
                                                                     <input type="radio" data-id="'.$index.'|'.$i.'"  name="radio-'.$index.'['.$i.']" value="'.$choice.'"> 
-                                                                    <span>'.$choice.'</span>
+                                                                    '.$choice.'
                                                                 </label>
                                                             </div>' ?>
                                                     <?php endforeach;?>
                                                     <?php $item = $soal.$pilihan;?>
+                                                <?php endif;?>
+                                            <?php elseif($data['item'] == "soal esai") :?>
+                                                <?php if($data['penulisan'] == "RTL") :?>
+                                                    <?php $soal = '<div dir="rtl" class="mb-3">'.$data['data']['soal'].'</div>' ?>
+                                                    <input type="hidden" name="jawaban_sesi_<?= $index?>[]" class="required" data-id="soal-<?= $i?>" id="jawaban_sesi_<?= $index?><?= $i?>" value="null">
+                                                    <?php $jawaban = '
+                                                                    <div class="form-floating mb-3">
+                                                                        <textarea name="jawaban" class="form form-control" data-id="'.$index.'|'.$i.'"></textarea>
+                                                                        <label for="jawaban">Answer</label>
+                                                                    </div>';?>
+                                                    <?php $item = $soal.$jawaban;?>
+                                                <?php else :?>
+                                                    <?php $soal = '<div class="mb-3">'.$data['data']['soal'].'</div>' ?>
+                                                    <input type="hidden" name="jawaban_sesi_<?= $index?>[]" class="required" data-id="soal-<?= $i?>" id="jawaban_sesi_<?= $index?><?= $i?>" value="null">
+                                                    <?php $jawaban = '
+                                                                    <div class="form-floating mb-3">
+                                                                        <textarea name="jawaban" class="form form-control" data-id="'.$index.'|'.$i.'"></textarea>
+                                                                        <label for="jawaban">Answer</label>
+                                                                    </div>';?>
+                                                    <?php $item = $soal.$jawaban;?>
                                                 <?php endif;?>
                                             <?php elseif($data['item'] == "petunjuk") :
                                                     if($data['penulisan'] == "RTL"){
@@ -185,21 +227,14 @@
                                                         $item = '<div dir="ltr" class="mb-3">'.$data['data'].'</div>';
                                                     }?>
                                             <?php elseif($data['item'] == "audio") :
-                                                $item = '<center>
-                                                    <audio id="audio-'.$data['id_item'].'" class="audio" data-id="'.$data['id_item'].'"><source src="'.$link['value'].'/assets/myaudio/'.$data['data'].'?t='.time().'" type="audio/mpeg"></audio>
-                                                    <progress id="seekbar-'.$data['id_item'].'" value="0" max="1" style="width:100%;"></progress><br>
-                                                    <button class="btn btn-success btnAudio" data-id="'.$data['id_item'].'" type="button">'.tablerIcon("player-play", "").' play</button>
-                                                    <p><small class="text-danger"><i>note : perhatian, audio hanya dapat diputar satu kali</i></small></p>
-                                                </center>
-                                            ';
+                                                $item = '<center><audio controls controlsList="nodownload"><source src="'.$link['value'].'/assets/myaudio/'.$data['data'].'.mp3" type="audio/mpeg"></audio></center>';
                                             ?>
                                             <?php elseif($data['item'] == "gambar") :
-                                                $padding = "p-0";
-                                                $item = '<img src="'.$link['value'].'/assets/myimg/'.$data['data'].'?t='.time().'" onerror="this.onerror=null; this.src='.base_url().'assets/tabler-icons-1.39.1/icons/x.svg" class="card-img-top" width=100%>';
+                                                $item = '<img src="'.$link['value'].'/assets/myimg/'.$data['data'].'?t='.time().'" onerror="this.onerror=null; this.src='.$link['value'].'/assets/tabler-icons-1.39.1/icons/x.svg" class="card-img-top" width=100%>';
                                             ?>
                                             <?php endif;?>
                                             <div class="shadow card mb-3 soal">
-                                                <div class="card-body <?= $padding?>" id="soal-<?= $i?>">
+                                                <div class="card-body" id="soal-<?= $i?>">
                                                     
                                                     <?= $item?>
                                 
@@ -285,17 +320,6 @@
 <?php $this->load->view("_partials/footer")?>
 
 <script>
-    $('.audio').on('timeupdate', function() {
-        let id = $(this).data("id");
-        $('#seekbar-'+id).attr("value", this.currentTime / this.duration);
-    });
-
-    $(".btnAudio").click(function(){
-        id = $(this).data("id");
-        $("#audio-"+id)[0].play();
-        $(this).hide();
-    })
-
     $("#hidePassword").hide();
     
     $("#showPassword").click(function(){
@@ -438,13 +462,19 @@
             }
             
         } else {
-
             jumlah_soal = $("[name='"+id+"']").val();
 
             sesi = id.replace("sesi-", "");
             sesi = parseInt(sesi-1);
 
-            if($('#sesi-'+sesi+' input:radio:checked').length != jumlah_soal){
+            let eror = 0;
+            $.each($("#sesi-"+sesi+" .required"), function(){
+                if($(this).val() == "null") {
+                    eror = 1
+                }
+            })
+
+            if(eror == 1){
             
                 $.each($("#sesi-"+sesi+" [name='jawaban_sesi_"+sesi+"[]']"), function(){
                     index = $(this).data("id");
@@ -501,8 +531,14 @@
         sesi = id.replace("sesi-", "");
         sesi = parseInt(sesi-1);
 
-        if($('#sesi-'+sesi+' input:radio:checked').length != jumlah_soal){
-        
+        let eror = 0;
+        $.each($("#sesi-"+sesi+" .required"), function(){
+            if($(this).val() == "null") {
+                eror = 1
+            }
+        })
+
+        if(eror == 1){
             $.each($("#sesi-"+sesi+" [name='jawaban_sesi_"+sesi+"[]']"), function(){
                 index = $(this).data("id");
                 $("#sesi-"+sesi+" #"+index).removeClass("list-group-item-danger")
@@ -527,16 +563,6 @@
                 cancelButtonText: 'Tidak'
             }).then(function (result) {
                 if (result.value) {
-                    
-                    swal.fire({
-                        html: '<h4>Menyimpan Jawaban Anda ...</h4>',
-                        allowOutsideClick: false,
-                        showConfirmButton: false,
-                        onBeforeOpen: () => {
-                            Swal.showLoading()
-                        },
-                    });
-
                     $(".btnSimpan").html("Proses...");
                     $(".btnSimpan").prop("disabled", true);
                     $(".btnBack").prop("disabled", true);
@@ -568,17 +594,6 @@
             sec = sec - 1;
         } else {
             clearInterval(countDown);
-            
-            swal.fire({
-                title: 'Waktu Anda Telah Habis',
-                html: '<h4>Menyimpan Jawaban Anda ...</h4>',
-                allowOutsideClick: false,
-                showConfirmButton: false,
-                onBeforeOpen: () => {
-                    Swal.showLoading()
-                },
-            });
-
             $("#formSoal").submit();
         }
     }
@@ -590,12 +605,11 @@
         $("#jawaban_sesi_"+id[0]+""+id[1]).val(value);
     });
 
-    document.addEventListener('play', function(e){  
-        var audios = document.getElementsByTagName('audio');  
-        for(var i = 0, len = audios.length; i < len;i++){  
-            if(audios[i] != e.target){  
-                audios[i].pause();  
-            }  
-        }  
-    }, true);
+    $('[name="jawaban"]').on("keyup change", function () {
+        let id = $(this).data("id");
+        id = id.split("|");
+        let value = $(this).val();
+        if(value != "") $("#jawaban_sesi_"+id[0]+""+id[1]).val(value);
+        else $("#jawaban_sesi_"+id[0]+""+id[1]).val("null");
+    });
 </script>

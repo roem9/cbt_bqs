@@ -118,9 +118,18 @@ class Soal extends CI_Controller {
 
             $data['title'] = $tes['nama_tes'];
             $data['tes'] = $tes;
+            $data['tes']['waktu'] = 120;
             $data['soal'] = $soal;
             foreach ($sesi as $i => $sesi) {
-                $sub_soal = $this->Main_model->get_all("item_soal", ["id_sub" => $sesi['id_sub'], "tampil" => "Ya"], 'urutan');
+                
+                if($tes['tampilan_soal'] == "Training V1"){
+                    $sub_soal = $this->Main_model->get_all("item_soal", ["id_sub" => $sesi['id_sub']], 'urutan');
+                } else if($tes['tampilan_soal'] == "Training V2"){
+                    $sub_soal = $this->Main_model->get_all("item_soal", ["id_sub" => $sesi['id_sub']], 'urutan');
+                } else if($tes['tampilan_soal'] == "TOEFL ITP"){
+                    $sub_soal = $this->Main_model->get_all("item_soal", ["id_sub" => $sesi['id_sub'], "tampil" => "Ya"], 'urutan');
+                }
+
                 $data['sesi'][$i] = [];
                 $number = 1;
                 foreach ($sub_soal as $j => $soal) {
@@ -148,6 +157,18 @@ class Soal extends CI_Controller {
                         $data['sesi'][$i]['soal'][$j]['id_text'] = $soal['id_text'];
                         $data['sesi'][$i]['soal'][$j]['tampil'] = $soal['tampil'];
                         $data['sesi'][$i]['soal'][$j]['waktu_soal'] = $soal['waktu_soal'];
+
+                        if(isset($txt_soal['pembahasan_benar'])){
+                            $data['sesi'][$i]['soal'][$j]['data']['pembahasan_benar'] = $txt_soal['pembahasan_benar'];
+                        } else {
+                            $data['sesi'][$i]['soal'][$j]['data']['pembahasan_benar'] = "";
+                        }
+            
+                        if(isset($txt_soal['pembahasan_salah'])){
+                            $data['sesi'][$i]['soal'][$j]['data']['pembahasan_salah'] = $txt_soal['pembahasan_salah'];
+                        } else {
+                            $data['sesi'][$i]['soal'][$j]['data']['pembahasan_salah'] = "";
+                        }
                         
                         $number++;
 
@@ -155,7 +176,14 @@ class Soal extends CI_Controller {
                         $data['sesi'][$i]['soal'][$j] = $soal;
                     }
 
-                    $data['sesi'][$i]['jumlah_soal'] = COUNT($this->Main_model->get_all("item_soal", ["id_sub" => $sesi['id_sub'], "tampil" => "Ya"]));
+                    if($tes['tampilan_soal'] == "Training V1"){
+                        $data['sesi'][$i]['jumlah_soal'] = COUNT($this->Main_model->get_all("item_soal", ["id_sub" => $sesi['id_sub'], "item" => "soal"]));
+                    } else if($tes['tampilan_soal'] == "Training V2"){
+                        $data['sesi'][$i]['jumlah_soal'] = COUNT($this->Main_model->get_all("item_soal", ["id_sub" => $sesi['id_sub'], "item" => "soal"]));
+                    } else if($tes['tampilan_soal'] == "TOEFL ITP"){
+                        $data['sesi'][$i]['jumlah_soal'] = COUNT($this->Main_model->get_all("item_soal", ["id_sub" => $sesi['id_sub'], "tampil" => "Ya"]));
+                    }
+
                     $data['sesi'][$i]['id_sub'] = $sesi['id_sub'];
                 }
             }
@@ -167,10 +195,21 @@ class Soal extends CI_Controller {
                 "helper.js",
             ];
 
-            if($data['soal']['tipe_soal'] == "TOEFL"){
-                $this->load->view("pages/soal-toefl", $data);
+            
+            if($this->session->flashdata('pesan') && $tes['pembahasan'] == "Ya"){
+                $this->load->view("pages/soal-pembahasan", $data);
             } else {
-                $this->load->view("pages/soal", $data);
+                if($data['soal']['tipe_soal'] == "TOEFL"){
+                    if($tes['tampilan_soal'] == "Training V1"){
+                        $this->load->view("pages/soal-toefl-training-v1", $data);
+                    } else if($tes['tampilan_soal'] == "Training V2"){
+                        $this->load->view("pages/soal-toefl-training-v2", $data);
+                    } else if($tes['tampilan_soal'] == "TOEFL ITP"){
+                        $this->load->view("pages/soal-toefl-itp", $data);
+                    }
+                } else {
+                    $this->load->view("pages/soal", $data);
+                }
             }
         } else {
             $data['title'] = "Blank Link";
@@ -264,8 +303,8 @@ class Soal extends CI_Controller {
             "medsos" => $this->input->post("medsos"),
             "pendidikan" => $this->input->post("pendidikan"),
             "waktu_mulai" => $this->input->post("waktu_mulai"),
-            "sisa_waktu_structure" => $this->input->post("sisa_waktu_structure"),
-            "sisa_waktu_reading" => $this->input->post("sisa_waktu_reading"),
+            // "sisa_waktu_structure" => $this->input->post("sisa_waktu_structure"),
+            // "sisa_waktu_reading" => $this->input->post("sisa_waktu_reading"),
             "nilai_listening" => $nilai_listening,
             "nilai_structure" => $nilai_structure,
             "nilai_reading" => $nilai_reading,
@@ -311,12 +350,9 @@ class Soal extends CI_Controller {
         );
 
         $msg = str_replace(array_keys($replacements), $replacements, $tes['msg']);
-        
-        if($tes['tipe_tes'] == 'Tes TOEFL (Bersertifikat)'){
-            $msg .= "<br><p>Untuk mendownload sertifikat Anda Silakan tekan tombol download. <a href='".base_url()."sertifikat/download/".md5($id)."' class='btn btn-sm btn-success'>download</a></p>";
-        }
+        $data['msg'] = $msg;
 
-        $this->session->set_flashdata('pesan', $msg);
+        $this->session->set_flashdata('pesan', $data);
 
         redirect(base_url("soal/id/".$id_tes), $data);
     }

@@ -10,26 +10,8 @@
                     <?php if( $this->session->flashdata('pesan') ) : ?>
                         <?= $this->session->flashdata('pesan')?>
                     <?php else: ?>
-                        <div class="mb-2">
-                            <label class="form-label">
-                            Password
-                            </label>
-                            <div class="input-group input-group-flat">
-                            <input type="password" name="password" class="form-control"  placeholder="Password"  autocomplete="off">
-                            <span class="input-group-text">
-                                <a href="javascript:void(0)" class="link-secondary" title="Show password" data-bs-toggle="tooltip">
-                                <svg width="24" height="24" id="showPassword">
-                                    <use xlink:href="<?= base_url()?>assets/tabler-icons-1.39.1/tabler-sprite.svg#tabler-eye" />
-                                </svg>
-                                <svg width="24" height="24" id="hidePassword" style="display:nones">
-                                    <use xlink:href="<?= base_url()?>assets/tabler-icons-1.39.1/tabler-sprite.svg#tabler-eye-off" />
-                                </svg>
-                                </a>
-                            </span>
-                            </div>
-                        </div>
                         <div class="form-footer">
-                            <button type="button" class="btn btn-primary w-100 btnSignIn" style="display:nones">Masuk</button>
+                            <button type="button" class="btn btn-primary w-100 btnSignIn" style="display:none">Masuk</button>
                         </div>
                     <?php endif;?>
                 </div>
@@ -106,22 +88,32 @@
                 <div class="page-body">
                     <div class="container-xl">
                         <div class="row row-cards FieldContainer" data-masonry='{"percentPosition": true }'>
-                            <?php if($soal['tipe_soal'] == "TOAFL" || $soal['tipe_soal'] == "TOEFL") :?>
-                                <form action="<?= base_url()?>soal/add_jawaban_toefl" method="post" id="formSoal">
+                            <form action="<?= base_url()?>peserta/add_jawaban_toefl" method="post" id="formSoal">
+                                
                                 <input type="hidden" name="waktu_mulai" id="">
-                                <input type="hidden" name="sisa_waktu_structure" value="00:00">
-                                <input type="hidden" name="sisa_waktu_reading" value="00:00">
-                            <?php else :?>
-                                <form action="<?= base_url()?>soal/add_jawaban" method="post" id="formSoal">
-                            <?php endif;?>
-                                <input type="hidden" name="id_tes" value="<?= $id?>">
+
+                                <!-- tambahan -->
+                                <input type="hidden" name="id_peserta" value="<?= $peserta['id_peserta']?>">
+                                <input type="hidden" name="id_soal" value="<?= $soal['id_soal']?>">
+
                                 <div id="sesi-0">
                                     <div class="card mb-3">
                                         <div class="card-header">
-                                            <p>Data Diri<br><i>(Harap mengisi data diri sesuai dengan data yang sebenarnya)</i></p>
+                                            <h3 class="card-title">Data Diri</h3>
                                         </div>
                                         <div class="card-body">
-                                            <?= $form?>
+                                            <div class="form-floating mb-3">
+                                                <input type="text" name="nama_peserta" class="form form-control required" readonly value="<?= $peserta['nama_peserta']?>">
+                                                <label>Nama Peserta</label>
+                                            </div>
+                                            <div class="form-floating mb-3">
+                                                <input type="text" name="no_hp" class="form form-control required" readonly value="<?= $peserta['no_hp']?>">
+                                                <label>No. Handphone</label>
+                                            </div>
+                                            <div class="form-floating mb-3">
+                                                <input type="text" name="email" class="form form-control required" readonly value="<?= $peserta['email']?>">
+                                                <label>Email</label>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="mb-3">
@@ -566,15 +558,15 @@
     })
 
     $(".btnSignIn").click(function(){
-        let id_tes = $("input[name='id_tes']").val();
-        let password = $("input[name='password']").val();
+        // let id_tes = $("input[name='id_tes']").val();
+        // let password = $("input[name='password']").val();
 
-        $.ajax({
-            url: "<?= base_url()?>soal/password_check",
-            method: "POST",
-            data: {id:id_tes, password:password},
-            success: function(result){
-                if(result){
+        // $.ajax({
+        //     url: "<?= base_url()?>soal/password_check",
+        //     method: "POST",
+        //     data: {id:id_tes, password:password},
+        //     success: function(result){
+        //         if(result){
                     Swal.fire({
                         icon: 'success',
                         title: '',
@@ -584,15 +576,15 @@
                     })
                     $("#login").hide();
                     $("#soal_tes").show();
-                } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: 'Password yang Anda masukkan salah'
-                    })
-                }
-            }
-        })
+        //         } else {
+        //             Swal.fire({
+        //                 icon: 'error',
+        //                 title: 'Oops...',
+        //                 text: 'Password yang Anda masukkan salah'
+        //             })
+        //         }
+        //     }
+        // })
     })
 
     $(".btnAudio").click(function(){
@@ -696,33 +688,31 @@
 
             let form = "#sesi-0";
 
-            let email = $(form+" [name='email']").val();
-            let id_tes = "<?= $id?>"
+            // let email = $(form+" [name='email']").val();
 
-            let eror = required(form);
+            // let eror = required(form);
             
-            if(eror == 1){
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'Lengkapi data terlebih dahulu',
-                })
-            } else {
-                let table = "<?= $table?>";
+            // if(eror == 1){
+            //     Swal.fire({
+            //         icon: 'error',
+            //         title: 'Oops...',
+            //         text: 'Lengkapi data terlebih dahulu',
+            //     })
+            // } else {
                 
-                $.ajax({
-                    url: "<?= base_url()?>soal/email_check/"+table,
-                    data: {email:email, id:id_tes},
-                    dataType: "JSON",
-                    method: "POST",
-                    success: function(result){
-                        if(result) {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Oops...',
-                                text: 'Maaf email Anda telah digunakan',
-                            })
-                        } else {
+            //     $.ajax({
+            //         url: "<?= base_url()?>soal/email_check/"+table,
+            //         data: {email:email, id:id_tes},
+            //         dataType: "JSON",
+            //         method: "POST",
+            //         success: function(result){
+            //             if(result) {
+            //                 Swal.fire({
+            //                     icon: 'error',
+            //                     title: 'Oops...',
+            //                     text: 'Maaf email Anda telah digunakan',
+            //                 })
+            //             } else {
                             
                             Swal.fire({
                                 icon: 'question',
@@ -760,10 +750,10 @@
                                     }
                                 }
                             })
-                        }
-                    }
-                })
-            }
+            //             }
+            //         }
+            //     })
+            // }
             
         } else {
             jumlah_soal = $("[name='"+id+"']").val();

@@ -42,6 +42,36 @@ class Sertifikat extends CI_Controller {
         // $this->load->view("pages/layout/footer");
     }
 
+    public function peserta($no = "no", $id){
+        $peserta = $this->Main_model->get_one("peserta_bussiness", ["md5(id_peserta)" => $id]);
+        $peserta['link'] = $this->Main_model->get_one("config", ['field' => "web admin"]);
+        if($peserta){
+            $tes = $this->Main_model->get_one("tes_peserta_bussiness", ["id_peserta" => $peserta['id_peserta'], "status" => "on"]);
+            $peserta['nama'] = $peserta['nama_peserta'];
+            $peserta['title'] = "Sertifikat ".$peserta['nama_peserta'];
+            $peserta['t4_lahir'] = ucwords(strtolower($peserta['t4_lahir']));
+            $peserta['tahun'] = date('Y', strtotime($tes['tgl_tes']));
+            $peserta['bulan'] = date('m', strtotime($tes['tgl_tes']));
+            $peserta['istima'] = poin("Listening", $tes['nilai_listening']);
+            $peserta['tarakib'] = poin("Structure", $tes['nilai_structure']);
+            $peserta['qiroah'] = poin("Reading", $tes['nilai_reading']);
+            $peserta['tgl_tes'] = $tes['tgl_tes'];
+            $peserta['skor_toefl'] = $tes['skor_toefl'];
+            // $peserta['tgl_berakhir'] = date('Y-m-d', strtotime('+6 months', strtotime($tes['tgl_tes'])));
+
+            // $skor = ((poin("Listening", $tes['nilai_listening']) + poin("Structure", $tes['nilai_structure']) + poin("Reading", $tes['nilai_reading'])) * 10) / 3;
+            // $peserta['skor_toefl'] = $peserta['skor_toefl'];
+
+            $peserta['no_doc'] = "RLE/TP-PB/{$peserta['tahun']}/{$peserta['bulan']}/{$peserta['no_doc']}";
+        }
+
+        // $this->load->view("pages/layout/header-sertifikat", $peserta);
+        // $this->load->view("pages/soal/".$page, $data);
+        $peserta['background'] = $this->Main_model->get_one("config", ["field" => 'background']);
+        $this->load->view("pages/sertifikat", $peserta);
+        // $this->load->view("pages/layout/footer");
+    }
+
     public function download($id){
         $peserta = $this->Main_model->get_one("peserta_toefl", ["md5(id)" => $id]);
         $tes = $this->Main_model->get_one("tes", ["id_tes" => $peserta['id_tes']]);

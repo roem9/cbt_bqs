@@ -10,93 +10,14 @@
                     <?php if( $this->session->flashdata('pesan') ) : ?>
                         <?= $this->session->flashdata('pesan')?>
                     <?php else: ?>
-                        <div class="mb-2">
-                            <label class="form-label">
-                            Password
-                            </label>
-                            <div class="input-group input-group-flat">
-                            <input type="password" name="password" class="form-control"  placeholder="Password"  autocomplete="off">
-                            <span class="input-group-text">
-                                <a href="javascript:void(0)" class="link-secondary" title="Show password" data-bs-toggle="tooltip">
-                                <svg width="24" height="24" id="showPassword">
-                                    <use xlink:href="<?= base_url()?>assets/tabler-icons-1.39.1/tabler-sprite.svg#tabler-eye" />
-                                </svg>
-                                <svg width="24" height="24" id="hidePassword" style="display:none">
-                                    <use xlink:href="<?= base_url()?>assets/tabler-icons-1.39.1/tabler-sprite.svg#tabler-eye-off" />
-                                </svg>
-                                </a>
-                            </span>
-                            </div>
-                        </div>
                         <div class="form-footer">
-                            <button type="button" class="btn btn-primary w-100 btnSignIn">Masuk</button>
+                            <button type="button" class="btn btn-primary w-100 btnSignIn">Mulai</button>
                         </div>
                     <?php endif;?>
                 </div>
             </div>
         </div>
     </div>
-
-    <div class="page page-center" id="transisi-1" style="display: none">
-        <div class="container-tight py-4">
-            <div class="card">
-                <div class="card-body">
-                    <div class="text-center mb-4">
-                        <a href="javascript:void()"><img src="<?= $link['value']?>/assets/img/logo.png" height="80" alt=""></a>
-                    </div>
-                    <center>
-                        <p><b>SESI 1 : LISTENING COMPROHENSION</b></p>
-                        <p><i>Audio untuk tes hanya dapat diputar 1 (satu) kali.</i></p>
-                        <p><i>Tes akan berakhir ketika audio berakhir dan Anda diwajibkan untuk submit jawaban Anda.</i></p>
-                    </center>
-                    <div class="form-footer">
-                        <button type="button" class="btn btn-primary w-100 btnTransisi" data-id="sesi-1">Mulai Tes</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="page page-center" id="transisi-2" style="display: none">
-        <div class="container-tight py-4">
-            <div class="card">
-                <div class="card-body">
-                    <div class="text-center mb-4">
-                        <a href="javascript:void()"><img src="<?= $link['value']?>/assets/img/logo.png" height="80" alt=""></a>
-                    </div>
-                    <center>
-                        <p><b>SESI 2 : STRUCTURE AND WRITTEN EXPRESSION</b></p>
-                        <p><i>Tes dan timer akan langsung berjalan ketika Anda memulai tes ini dengan klik tombol "Next"</i></p>
-                        <p><i>Tes akan berakhir ketika waktu pengerjaan habis dan Anda diwajibkan untuk submit jawaban Anda</i></p>
-                    </center>
-                    <div class="form-footer">
-                        <button type="button" class="btn btn-primary w-100 btnTransisi" data-id="sesi-2">Next</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="page page-center" id="transisi-3" style="display: none">
-        <div class="container-tight py-4">
-            <div class="card">
-                <div class="card-body">
-                    <div class="text-center mb-4">
-                        <a href="javascript:void()"><img src="<?= $link['value']?>/assets/img/logo.png" height="80" alt=""></a>
-                    </div>
-                    <center>
-                        <p><b>SESI 3 : READING COMPREHENSION</b></p>
-                        <p><i>Tes dan timer akan langsung berjalan ketika Anda memulai tes ini dengan klik tombol "Next"</i></p>
-                        <p><i>Tes akan berakhir ketika waktu pengerjaan habis dan Anda diwajibkan untuk submit jawaban Anda</i></p>
-                    </center>
-                    <div class="form-footer">
-                        <button type="button" class="btn btn-primary w-100 btnTransisi" data-id="sesi-3">Next</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <div id="soal_tes" style="display: none">
         <div class="wrapper" id="elementtoScrollToID">
             <div class="sticky-top">
@@ -106,20 +27,32 @@
                 <div class="page-body">
                     <div class="container-xl">
                         <div class="row row-cards FieldContainer" data-masonry='{"percentPosition": true }'>
-                            <?php if($soal['tipe_soal'] == "TOAFL" || $soal['tipe_soal'] == "TOEFL") :?>
-                                <form action="<?= base_url()?>soal/add_jawaban_toefl" method="post" id="formSoal">
-                            <?php else :?>
-                                <form action="<?= base_url()?>soal/add_jawaban" method="post" id="formSoal">
-                            <?php endif;?>
-                                <input type="hidden" name="id_tes" value="<?= $id?>">
+                            <form action="<?= base_url()?>peserta/add_jawaban_toefl" method="post" id="formSoal">
+                                <input type="hidden" name="waktu_mulai" id="">
+
+                                <!-- tambahan -->
+                                <input type="hidden" name="id_peserta" value="<?= $peserta['id_peserta']?>">
+                                <input type="hidden" name="id_soal" value="<?= $soal['id_soal']?>">
+
+
                                 <div id="sesi-0">
                                     <div class="card mb-3">
                                         <div class="card-header">
                                             <h3 class="card-title">Data Diri</h3>
-                                            <p><i>(Harap mengisi data diri sesuai dengan data yang sebenarnya)</i></p>
                                         </div>
                                         <div class="card-body">
-                                            <?= $form?>
+                                            <div class="form-floating mb-3">
+                                                <input type="text" name="nama_peserta" class="form form-control required" readonly value="<?= $peserta['nama_peserta']?>">
+                                                <label>Nama Peserta</label>
+                                            </div>
+                                            <div class="form-floating mb-3">
+                                                <input type="text" name="no_hp" class="form form-control required" readonly value="<?= $peserta['no_hp']?>">
+                                                <label>No. Handphone</label>
+                                            </div>
+                                            <div class="form-floating mb-3">
+                                                <input type="text" name="email" class="form form-control required" readonly value="<?= $peserta['email']?>">
+                                                <label>Email</label>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="mb-3">
@@ -141,7 +74,7 @@
                                     <div id="sesi-<?=$index?>" style="display: none">
 
                                         <div class="form-floating mb-3">
-                                            <select name="fontSize" class="form-control required">
+                                            <select name="fontSize" class="form-control">
                                                 <option value="">Pilih Ukuran Tulisan</option>
                                                 <option value="">Default</option>
                                                 <option value="20px">20px</option>
@@ -208,7 +141,7 @@
                                             <?php if($data['item'] == "soal") :?>
                                                 <?php if($data['penulisan'] == "RTL") :?>
                                                     <?php $soal = '<div dir="rtl" class="mb-3">'.$data['data']['soal'].'</div>' ?>
-                                                    <input type="hidden" name="jawaban_sesi_<?= $index?>[]" data-id="soal-<?= $i?>" id="jawaban_sesi_<?= $index?><?= $i?>" value="null">
+                                                    <input type="hidden" name="jawaban_sesi_<?= $index?>[]" class="required" data-id="soal-<?= $i?>" id="jawaban_sesi_<?= $index?><?= $i?>" value="null">
                                                     <?php $pilihan = "";?>
                                                     <?php foreach ($data['data']['pilihan'] as $k => $choice) :?>
                                                         <?php $pilihan .= '
@@ -226,7 +159,7 @@
                                                     <?php $item = $soal.$pilihan;?>
                                                 <?php else :?>
                                                     <?php $soal = '<div class="mb-3">'.$data['data']['soal'].'</div>' ?>
-                                                    <input type="hidden" name="jawaban_sesi_<?= $index?>[]" data-id="soal-<?= $i?>" id="jawaban_sesi_<?= $index?><?= $i?>" value="null">
+                                                    <input type="hidden" name="jawaban_sesi_<?= $index?>[]" class="required" data-id="soal-<?= $i?>" id="jawaban_sesi_<?= $index?><?= $i?>" value="null">
                                                     <?php $pilihan = "";?>
                                                     <?php foreach ($data['data']['pilihan'] as $k => $choice) :?>
                                                         <?php $pilihan .= '
@@ -239,6 +172,26 @@
                                                     <?php endforeach;?>
                                                     <?php $item = $soal.$pilihan;?>
                                                 <?php endif;?>
+                                            <?php elseif($data['item'] == "soal esai") :?>
+                                                <?php if($data['penulisan'] == "RTL") :?>
+                                                    <?php $soal = '<div dir="rtl" class="mb-3">'.$data['data']['soal'].'</div>' ?>
+                                                    <input type="hidden" name="jawaban_sesi_<?= $index?>[]" class="required" data-id="soal-<?= $i?>" id="jawaban_sesi_<?= $index?><?= $i?>" value="null">
+                                                    <?php $jawaban = '
+                                                                    <div class="form-floating mb-3">
+                                                                        <textarea name="jawaban" class="form form-control" data-id="'.$index.'|'.$i.'"></textarea>
+                                                                        <label for="jawaban">Answer</label>
+                                                                    </div>';?>
+                                                    <?php $item = $soal.$jawaban;?>
+                                                <?php else :?>
+                                                    <?php $soal = '<div class="mb-3">'.$data['data']['soal'].'</div>' ?>
+                                                    <input type="hidden" name="jawaban_sesi_<?= $index?>[]" class="required" data-id="soal-<?= $i?>" id="jawaban_sesi_<?= $index?><?= $i?>" value="null">
+                                                    <?php $jawaban = '
+                                                                    <div class="form-floating mb-3">
+                                                                        <textarea name="jawaban" class="form form-control" data-id="'.$index.'|'.$i.'"></textarea>
+                                                                        <label for="jawaban">Answer</label>
+                                                                    </div>';?>
+                                                    <?php $item = $soal.$jawaban;?>
+                                                <?php endif;?>
                                             <?php elseif($data['item'] == "petunjuk") :
                                                     if($data['penulisan'] == "RTL"){
                                                         $item = '<div dir="rtl" class="mb-3">'.$data['data'].'</div>';
@@ -246,13 +199,10 @@
                                                         $item = '<div dir="ltr" class="mb-3">'.$data['data'].'</div>';
                                                     }?>
                                             <?php elseif($data['item'] == "audio") :
-                                                $item = '<center>
-                                                            <audio id="audio-'.$data['id_item'].'" class="audio" data-id="'.$data['id_item'].'"><source src="'.$link['value'].'/assets/myaudio/'.$data['data'].'?t='.time().'" type="audio/mpeg"></audio>
-                                                            <progress id="seekbar-'.$data['id_item'].'" value="0" max="1" style="width:100%;"></progress><br>
-                                                            <button class="btn btn-success btnAudio" data-id="'.$data['id_item'].'" type="button">'.tablerIcon("player-play", "").' play</button>
-                                                            <p><small class="text-danger"><i>note : perhatian, audio hanya dapat diputar satu kali</i></small></p>
-                                                        </center>
-                                                        ';
+                                                $item = '<center><audio controls controlsList="nodownload"><source src="'.$link['value'].'/assets/myaudio/'.$data['data'].'?t='.time().'" type="audio/mpeg"></audio></center>';
+                                            ?>
+                                            <?php elseif($data['item'] == "gambar") :
+                                                $item = '<img src="'.$link['value'].'/assets/myimg/'.$data['data'].'?t='.time().'" onerror="this.onerror=null; this.src='.$link['value'].'/assets/tabler-icons-1.39.1/icons/x.svg" class="card-img-top" width=100%>';
                                             ?>
                                             <?php endif;?>
                                             <div class="shadow card mb-3 soal">
@@ -342,11 +292,6 @@
 <?php $this->load->view("_partials/footer")?>
 
 <script>
-    $('.audio').on('timeupdate', function() {
-        let id = $(this).data("id");
-        $('#seekbar-'+id).attr("value", this.currentTime / this.duration);
-    });
-
     $("#hidePassword").hide();
     
     $("#showPassword").click(function(){
@@ -368,15 +313,15 @@
     })
 
     $(".btnSignIn").click(function(){
-        let id_tes = $("input[name='id_tes']").val();
-        let password = $("input[name='password']").val();
+        // let id_tes = $("input[name='id_tes']").val();
+        // let password = $("input[name='password']").val();
 
-        $.ajax({
-            url: "<?= base_url()?>soal/password_check",
-            method: "POST",
-            data: {id:id_tes, password:password},
-            success: function(result){
-                if(result){
+        // $.ajax({
+        //     url: "<?= base_url()?>soal/password_check",
+        //     method: "POST",
+        //     data: {id:id_tes, password:password},
+        //     success: function(result){
+        //         if(result){
                     Swal.fire({
                         icon: 'success',
                         title: '',
@@ -386,21 +331,15 @@
                     })
                     $("#login").hide();
                     $("#soal_tes").show();
-                } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: 'Password yang Anda masukkan salah'
-                    })
-                }
-            }
-        })
-    })
-
-    $(".btnAudio").click(function(){
-        id = $(this).data("id");
-        $("#audio-"+id)[0].play();
-        $(this).hide();
+        //         } else {
+        //             Swal.fire({
+        //                 icon: 'error',
+        //                 title: 'Oops...',
+        //                 text: 'Password yang Anda masukkan salah'
+        //             })
+        //         }
+        //     }
+        // })
     })
 
     var click = false;
@@ -411,9 +350,6 @@
 
             let form = "#sesi-0";
 
-            let email = $(form+" [name='email']").val();
-            let id_tes = "<?= $id?>"
-
             let eror = required(form);
             
             if(eror == 1){
@@ -423,73 +359,84 @@
                     text: 'Lengkapi data terlebih dahulu',
                 })
             } else {
-                let table = "<?= $table?>";
-                
-                $.ajax({
-                    url: "<?= base_url()?>soal/email_check/"+table,
-                    data: {email:email, id:id_tes},
-                    dataType: "JSON",
-                    method: "POST",
-                    success: function(result){
-                        if(result) {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Oops...',
-                                text: 'Maaf email Anda telah digunakan',
-                            })
-                        } else {
-                            if(click == false) {
-                                Swal.fire({
-                                    icon: 'question',
-                                    html: 'Mulai mengerjakan soal?',
-                                    showCloseButton: true,
-                                    showCancelButton: true,
-                                    confirmButtonText: 'Ya',
-                                    cancelButtonText: 'Tidak'
-                                }).then(function (result) {
-                                    if (result.value) {
-                                        // hide all id 
-                                        $("div[id^='sesi-'").hide();
-                                        // show sesi 
-                                        $("#"+id).show();
-                                        
-                                        // scroll to top 
-                                        if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-                                            $([document.documentElement, document.body]).animate({
-                                                scrollTop: $("#elementtoScrollToID").offset().top
-                                            }, 1000);
-                                        }
-
-                                    } else {
-                                        return;
-                                    }
-                                })
-                            } else {
-                                // hide all id 
-                                $("div[id^='sesi-'").hide();
-                                // show sesi 
-                                $("#"+id).show();
-                                
-                                // scroll to top 
-                                if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-                                    $([document.documentElement, document.body]).animate({
-                                        scrollTop: $("#elementtoScrollToID").offset().top
-                                    }, 1000);
-                                }
+                if(click == false) {
+                    Swal.fire({
+                        icon: 'question',
+                        html: 'Mulai mengerjakan soal?',
+                        showCloseButton: true,
+                        showCancelButton: true,
+                        confirmButtonText: 'Ya',
+                        cancelButtonText: 'Tidak'
+                    }).then(function (result) {
+                        if (result.value) {
+                            // mulai hitung waktu
+                            if(click == false){
+                                sec = <?= $tes['waktu']?> * 60,
+                                countDiv = document.getElementById("waktu"),
+                                secpass,
+                                countDown = setInterval(function () {
+                                    'use strict';
+                                    secpass();
+                                }, 1000);
                             }
+
+                            click = true;
+                            // hide all id 
+                            $("div[id^='sesi-'").hide();
+                            // show sesi 
+                            $("#"+id).show();
+                            
+                            // scroll to top 
+                            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                                $([document.documentElement, document.body]).animate({
+                                    scrollTop: $("#elementtoScrollToID").offset().top
+                                }, 1000);
+                            }
+
+                            var currentdate = new Date(); 
+                            // var datetime = currentdate.getHours() + ":" + currentdate.getMinutes();
+                            var datetime = currentdate.getDate() + "/"
+                            + (currentdate.getMonth()+1)  + "/" 
+                            + currentdate.getFullYear() + " @ "  
+                            + currentdate.getHours() + ":"  
+                            + currentdate.getMinutes() + ":" 
+                            + currentdate.getSeconds();
+
+                            $("[name='waktu_mulai'").val(datetime);
+
+                        } else {
+                            return;
                         }
+                    })
+                } else {
+                    // hide all id 
+                    $("div[id^='sesi-'").hide();
+                    // show sesi 
+                    $("#"+id).show();
+                    
+                    // scroll to top 
+                    if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                        $([document.documentElement, document.body]).animate({
+                            scrollTop: $("#elementtoScrollToID").offset().top
+                        }, 1000);
                     }
-                })
+                }
             }
             
         } else {
-
             jumlah_soal = $("[name='"+id+"']").val();
 
             sesi = id.replace("sesi-", "");
             sesi = parseInt(sesi-1);
 
-            if($('#sesi-'+sesi+' input:radio:checked').length != jumlah_soal){
+            let eror = 0;
+            $.each($("#sesi-"+sesi+" .required"), function(){
+                if($(this).val() == "null") {
+                    eror = 1
+                }
+            })
+
+            if(eror == 1){
             
                 $.each($("#sesi-"+sesi+" [name='jawaban_sesi_"+sesi+"[]']"), function(){
                     index = $(this).data("id");
@@ -500,61 +447,11 @@
                     }
                 })
 
-                if(id == 'sesi-2'){
-                    Swal.fire({
-                        icon: 'question',
-                        html: 'Anda belum menyelesaikan soal pada sesi ini, Yakin akan pindah ke sesi selanjutnya?<br><small style="font-size: 0.70em" class="form-text text-danger">Anda tidak akan bisa kembali ke sesi ini</small>',
-                        showCloseButton: true,
-                        showCancelButton: true,
-                        confirmButtonText: 'Ya',
-                        cancelButtonText: 'Tidak'
-                    }).then(function (result) {
-                        if (result.value) {
-                            if(typeof countDown != 'undefined'){
-                                clearInterval(countDown);
-                            }
-
-                            if(id == 'sesi-2'){
-                                
-                                var audios = document.getElementsByTagName('audio');  
-                                for(var i = 0, len = audios.length; i < len;i++){  
-                                    if(audios[i]){  
-                                        audios[i].pause();  
-                                    }  
-                                }
-
-                                sec = 25 * 60;
-                            } else if(id == 'sesi-3'){
-                                sec = 55 * 60;
-                            }
-
-                            countDiv = document.getElementById("waktu"),
-                            secpass,
-                            countDown = setInterval(function () {
-                                'use strict';
-                                secpass(id);
-                            }, 1000);
-
-                            // hide all id 
-                            $("div[id^='sesi-'").hide();
-                            // show sesi 
-                            $("#"+id).show();
-                            
-                            // scroll to top 
-                            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-                                $([document.documentElement, document.body]).animate({
-                                    scrollTop: $("#elementtoScrollToID").offset().top
-                                }, 1000);
-                            }
-                        }
-                    })
-                } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: 'Anda belum menyelesaikan soal pada sesi ini',
-                    })
-                }
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Anda belum menyelesaikan soal pada sesi ini',
+                })
             } else {
                 Swal.fire({
                     icon: 'question',
@@ -565,37 +462,18 @@
                     cancelButtonText: 'Tidak'
                 }).then(function (result) {
                     if (result.value) {
-                        if(typeof countDown != 'undefined'){
-                            clearInterval(countDown);
-                        }
-
-                        Swal.fire({
-                            icon: 'info',
-                            title: '',
-                            text: 'Anda telah menyelesaikan sesi Structure. Sesi selanjutnya adalah sesi Reading dengan waktu 55 menit. Tekan OK untuk mulai mengerjakan.',
-                            allowOutsideClick: false,
-                        }).then(function (result) {
-                            sec = 55 * 60;
-
-                            countDiv = document.getElementById("waktu"),
-                            secpass,
-                            countDown = setInterval(function () {
-                                'use strict';
-                                secpass(id);
+                        
+                        // hide all id 
+                        $("div[id^='sesi-'").hide();
+                        // show sesi 
+                        $("#"+id).show();
+                        
+                        // scroll to top 
+                        if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                            $([document.documentElement, document.body]).animate({
+                                scrollTop: $("#elementtoScrollToID").offset().top
                             }, 1000);
-
-                            // hide all id 
-                            $("div[id^='sesi-'").hide();
-                            // show sesi 
-                            $("#"+id).show();
-                            
-                            // scroll to top 
-                            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-                                $([document.documentElement, document.body]).animate({
-                                    scrollTop: $("#elementtoScrollToID").offset().top
-                                }, 1000);
-                            }
-                        })
+                        }
                     }
                 })
             }
@@ -615,8 +493,14 @@
         sesi = id.replace("sesi-", "");
         sesi = parseInt(sesi-1);
 
-        if($('#sesi-'+sesi+' input:radio:checked').length != jumlah_soal){
-        
+        let eror = 0;
+        $.each($("#sesi-"+sesi+" .required"), function(){
+            if($(this).val() == "null") {
+                eror = 1
+            }
+        })
+
+        if(eror == 1){
             $.each($("#sesi-"+sesi+" [name='jawaban_sesi_"+sesi+"[]']"), function(){
                 index = $(this).data("id");
                 $("#sesi-"+sesi+" #"+index).removeClass("list-group-item-danger")
@@ -641,16 +525,7 @@
                 cancelButtonText: 'Tidak'
             }).then(function (result) {
                 if (result.value) {
-                    swal.fire({
-                        html: '<h4>Menyimpan Jawaban Anda ...</h4>',
-                        allowOutsideClick: false,
-                        showConfirmButton: false,
-                        onBeforeOpen: () => {
-                            Swal.showLoading()
-                        },
-                    });
-
-                    $(".btnSimpan").html("Menyimpan...");
+                    $(".btnSimpan").html("Proses...");
                     $(".btnSimpan").prop("disabled", true);
                     $(".btnBack").prop("disabled", true);
                     $("#formSoal").submit()
@@ -659,80 +534,29 @@
         }
     })
 
-    function secpass(id) {
+    function secpass() {
         'use strict';
-        var min = Math.floor(sec / 60),
-        remSec  = sec % 60;
+        
+        var min     = Math.floor(sec / 60),
+            remSec  = sec % 60;
+        
         if (remSec < 10) {
+            
             remSec = '0' + remSec;
+        
         }
         if (min < 10) {
+            
             min = '0' + min;
+        
         }
-
         countDiv.innerHTML = min + ":" + remSec;
+        
         if (sec > 0) {
             sec = sec - 1;
         } else {
-            if(id == 'sesi-2'){
-                clearInterval(countDown);
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'Waktu Anda telah habis untuk mengerjakan soal structure',
-                    allowOutsideClick: false,
-                }).then(function (result) {
-                    
-                    Swal.fire({
-                        icon: 'info',
-                        title: '',
-                        text: 'Anda telah menyelesaikan sesi Structure. Sesi selanjutnya adalah sesi Reading dengan waktu 55 menit. Tekan OK untuk mulai mengerjakan.',
-                        allowOutsideClick: false,
-                    }).then(function (result) {
-                        // scroll to top 
-                        if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-                            $([document.documentElement, document.body]).animate({
-                                scrollTop: $("#elementtoScrollToID").offset().top
-                            }, 1000);
-                        }
-
-                        // hide all id 
-                        $("div[id^='sesi-'").hide();
-                        // show sesi 
-                        $("#sesi-3").show();
-
-                        sec = 55 * 60
-                        countDown = setInterval(function () {
-                            'use strict';
-                            secpass('sesi-3');
-                        }, 1000);
-                    })
-                })
-            } else {
-                clearInterval(countDown);
-
-                // scroll to top 
-                if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-                    $([document.documentElement, document.body]).animate({
-                        scrollTop: $("#elementtoScrollToID").offset().top
-                    }, 1000);
-                }
-
-                swal.fire({
-                    title: 'Waktu Anda Telah Habis',
-                    html: '<h4>Menyimpan Jawaban Anda ...</h4>',
-                    allowOutsideClick: false,
-                    showConfirmButton: false,
-                    onBeforeOpen: () => {
-                        Swal.showLoading()
-                    },
-                });
-
-                $(".btnSimpan").html("Menyimpan...");
-                $(".btnSimpan").prop("disabled", true);
-                $(".btnBack").prop("disabled", true);
-                $("#formSoal").submit()
-            }
+            clearInterval(countDown);
+            $("#formSoal").submit();
         }
     }
 
@@ -743,12 +567,11 @@
         $("#jawaban_sesi_"+id[0]+""+id[1]).val(value);
     });
 
-    document.addEventListener('play', function(e){  
-        var audios = document.getElementsByTagName('audio');  
-        for(var i = 0, len = audios.length; i < len;i++){  
-            if(audios[i] != e.target){  
-                audios[i].pause();  
-            }  
-        }  
-    }, true);
+    $('[name="jawaban"]').on("keyup change", function () {
+        let id = $(this).data("id");
+        id = id.split("|");
+        let value = $(this).val();
+        if(value != "") $("#jawaban_sesi_"+id[0]+""+id[1]).val(value);
+        else $("#jawaban_sesi_"+id[0]+""+id[1]).val("null");
+    });
 </script>
