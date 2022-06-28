@@ -8,7 +8,7 @@
                     </div>
                     <h2 class="card-title text-center mb-4"><?= $title?></h2>
                     <?php if( $this->session->flashdata('pesan') ) : ?>
-                        <?= $this->session->flashdata('pesan')?>
+                        <?= $this->session->flashdata('pesan')['msg']?>
                     <?php else: ?>
                         <div class="mb-2">
                             <label class="form-label">
