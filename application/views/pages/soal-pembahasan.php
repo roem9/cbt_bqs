@@ -1,6 +1,6 @@
 <?php $this->load->view("_partials/header")?>
-    <?php $data_peserta = $this->session->flashdata('pesan');?>
-    <?php
+    <?php 
+        $data_peserta = $this->session->flashdata('pesan');
         $string = trim(preg_replace('/\s+/', ' ', $data_peserta['text']));
         $txt_soal = json_decode($string, true );
         $jawaban_peserta = $txt_soal['jawaban'];

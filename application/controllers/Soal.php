@@ -265,7 +265,11 @@ class Soal extends CI_Controller {
                 $txt_soal = json_decode($string, true );
 
                 $sub_soal = $txt_soal['jawaban'];
-                if($sub_soal == $jawaban[$j]){
+
+                $jawaban_soal = $jawaban[$j];
+                $jawaban_soal = str_replace('"', "&quot;", $jawaban_soal);
+
+                if($sub_soal == $jawaban_soal){
                     $status = "benar";
                     $benar++;
                 } else {
@@ -273,7 +277,7 @@ class Soal extends CI_Controller {
                     $salah++;
                 }
                 $no = $j+1;
-                $text .= '['.$i.','.$no.',"'.$jawaban[$j].'","'.$status.'"],';
+                $text .= '['.$i.','.$no.',"'.$jawaban_soal.'","'.$status.'"],';
             }
 
             if($i == 1){
