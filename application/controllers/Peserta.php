@@ -325,7 +325,7 @@ class Peserta extends CI_Controller {
         // $skor = ((poin("Listening", $peserta['nilai_listening']) + poin("Structure", $peserta['nilai_structure']) + poin("Reading", $peserta['nilai_reading'])) * 10) / 3;
         $peserta['skor'] = $tes['skor_toefl'];
         
-        $peserta['no_doc'] = "RLE/TP-PB/{$peserta['tahun']}/{$peserta['bulan']}/{$peserta['no_doc']}";
+        $peserta['no_doc'] = "EI/TP-PB/{$peserta['tahun']}/{$peserta['bulan']}/{$peserta['no_doc']}";
 
         $peserta['config'] = $this->Main_model->config();
         $peserta['id_tes'] = $peserta['id_tes'];

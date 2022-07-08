@@ -46,8 +46,8 @@
         .qrcode{
             /* width: 210px; */
 			position: absolute;
-            right: 77px;
-			top: 69px;
+            right: 455px;
+			bottom: 30px;
             font-size: 35px;
             word-spacing: 3px;
         }
@@ -56,8 +56,8 @@
             /* background-color: red; */
             /* width: 210px; */
 			position: absolute;
-            right: 93px;
-			top: 187px;
+            right: 484px;
+			bottom: 20px;
             font-size: 10px;
             word-spacing: 3px;
         }
@@ -106,7 +106,7 @@
 			position: absolute;
             left: 539px;
 			/* bottom: 242px; */
-			bottom: 219px;
+			bottom: 222px;
             font-size: 18px;
             font-family: 'times';
             word-spacing: 3px;
@@ -169,8 +169,8 @@
             /* background-color: red; */
             width: 250px;
 			position: absolute;
-            left: 310px;
-			bottom: 171px;
+            left: 260px;
+			bottom: 184px;
             font-size: 16px;
             font-family: 'times';
             word-spacing: 3px;
@@ -181,8 +181,8 @@
             /* background-color: red; */
             width: 250px;
 			position: absolute;
-            left: 310px;
-			bottom: 147px;
+            left: 260px;
+			bottom: 160px;
             font-size: 16px;
             font-family: 'times';
             word-spacing: 3px;
@@ -237,7 +237,7 @@
 </head>
     <body style="text-align: center">
         <div class="qrcode">
-            <img src="<?= base_url()?>assets/qrcode/<?= $id?>.png" width=120 alt="">
+            <img src="<?= base_url()?>assets/qrcode/<?= $id?>.png" width=145 alt="">
         </div>
         <div class="scan"><center>scan for validation</center></div>
         <div class="nilai"><p style="text-align: right; margin: 0px"><?= round($skor)?></p></div>

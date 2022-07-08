@@ -30,9 +30,9 @@ class Sertifikat extends CI_Controller {
             $peserta['link_foto'] = config();
 
             $skor = ((poin("Listening", $peserta['nilai_listening']) + poin("Structure", $peserta['nilai_structure']) + poin("Reading", $peserta['nilai_reading'])) * 10) / 3;
-            $peserta['skor'] = $skor;
+            $peserta['skor_toefl'] = round($skor);
 
-            $peserta['no_doc'] = "{$peserta['no_doc']}/TOEFL/Digital/{$peserta['tahun']}";
+            $peserta['no_doc'] = "EI/TP-P/{$peserta['tahun']}/{$peserta['bulan']}/{$peserta['no_doc']}";
         }
 
         // $this->load->view("pages/layout/header-sertifikat", $peserta);
@@ -56,13 +56,13 @@ class Sertifikat extends CI_Controller {
             $peserta['tarakib'] = poin("Structure", $tes['nilai_structure']);
             $peserta['qiroah'] = poin("Reading", $tes['nilai_reading']);
             $peserta['tgl_tes'] = $tes['tgl_tes'];
-            $peserta['skor_toefl'] = $tes['skor_toefl'];
+            $peserta['skor_toefl'] = round($tes['skor_toefl']);
             // $peserta['tgl_berakhir'] = date('Y-m-d', strtotime('+6 months', strtotime($tes['tgl_tes'])));
 
             // $skor = ((poin("Listening", $tes['nilai_listening']) + poin("Structure", $tes['nilai_structure']) + poin("Reading", $tes['nilai_reading'])) * 10) / 3;
             // $peserta['skor_toefl'] = $peserta['skor_toefl'];
 
-            $peserta['no_doc'] = "RLE/TP-PB/{$peserta['tahun']}/{$peserta['bulan']}/{$peserta['no_doc']}";
+            $peserta['no_doc'] = "EI/TP-PB/{$peserta['tahun']}/{$peserta['bulan']}/{$peserta['no_doc']}";
         }
 
         // $this->load->view("pages/layout/header-sertifikat", $peserta);
