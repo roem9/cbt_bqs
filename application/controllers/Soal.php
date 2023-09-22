@@ -122,13 +122,17 @@ class Soal extends CI_Controller {
             $data['soal'] = $soal;
             foreach ($sesi as $i => $sesi) {
                 
-                if($tes['tampilan_soal'] == "Training V1"){
-                    $sub_soal = $this->Main_model->get_all("item_soal", ["id_sub" => $sesi['id_sub']], 'urutan');
-                } else if($tes['tampilan_soal'] == "Training V2"){
-                    $sub_soal = $this->Main_model->get_all("item_soal", ["id_sub" => $sesi['id_sub']], 'urutan');
-                } else if($tes['tampilan_soal'] == "TOEFL ITP"){
-                    $sub_soal = $this->Main_model->get_all("item_soal", ["id_sub" => $sesi['id_sub'], "tampil" => "Ya"], 'urutan');
-                }
+                // if($tes['tampilan_soal'] == "Training V1"){
+                //     $sub_soal = $this->Main_model->get_all("item_soal", ["id_sub" => $sesi['id_sub']], 'urutan');
+                // } else if($tes['tampilan_soal'] == "Training V2"){
+                //     $sub_soal = $this->Main_model->get_all("item_soal", ["id_sub" => $sesi['id_sub']], 'urutan');
+                // } else if($tes['tampilan_soal'] == "TOEFL ITP"){
+                //     $sub_soal = $this->Main_model->get_all("item_soal", ["id_sub" => $sesi['id_sub'], "tampil" => "Ya"], 'urutan');
+                // }
+
+                $sub_soal = $this->db->query("SELECT * FROM item_soal WHERE id_sub = $sesi[id_sub] AND tampil = 'Ya' ORDER BY urutan")->result_array();
+                // var_dump($sub_soal);
+                // exit();
 
                 $data['sesi'][$i] = [];
                 $number = 1;
@@ -176,15 +180,24 @@ class Soal extends CI_Controller {
                         $data['sesi'][$i]['soal'][$j] = $soal;
                     }
 
-                    if($tes['tampilan_soal'] == "Training V1"){
-                        $data['sesi'][$i]['jumlah_soal'] = COUNT($this->Main_model->get_all("item_soal", ["id_sub" => $sesi['id_sub'], "item" => "soal"]));
-                    } else if($tes['tampilan_soal'] == "Training V2"){
-                        $data['sesi'][$i]['jumlah_soal'] = COUNT($this->Main_model->get_all("item_soal", ["id_sub" => $sesi['id_sub'], "item" => "soal"]));
-                    } else if($tes['tampilan_soal'] == "TOEFL ITP"){
-                        $data['sesi'][$i]['jumlah_soal'] = COUNT($this->Main_model->get_all("item_soal", ["id_sub" => $sesi['id_sub'], "tampil" => "Ya"]));
+                    $data['sesi'][$i]['id_sub'] = $sesi['id_sub'];
+                    $data['sesi'][$i]['waktu'] = $sesi['waktu'];
+                    
+                    $dataSesi = $this->db->query("SELECT * FROM sub_soal WHERE id_sub = $sesi[id_sub]")->row_array();
+                    $data['sesi'][$i]['tipe_soal'] = $dataSesi['tipe_soal'];
+                    $data['sesi'][$i]['banner'] = $dataSesi['banner'];
+
+                    if($dataSesi['isaudio']){
+                        $data['sesi'][$i]['startSoal'] = 1;
+                    } else {
+                        $data['sesi'][$i]['startSoal'] = 0;
                     }
 
-                    $data['sesi'][$i]['id_sub'] = $sesi['id_sub'];
+                    if($dataSesi['tipe_soal'] == 'Tampil Satuan'){
+                        $data['sesi'][$i]['jumlah_soal'] = COUNT($this->Main_model->get_all("item_soal", ["id_sub" => $sesi['id_sub'], "tampil" => "Ya"]));
+                    } else if($dataSesi['tipe_soal'] == 'Tampil Keseluruhan'){
+                        $data['sesi'][$i]['jumlah_soal'] = COUNT($this->Main_model->get_all("item_soal", ["id_sub" => $sesi['id_sub'], "tampil" => "Ya", "item" => "soal"]));
+                    }
                 }
             }
 

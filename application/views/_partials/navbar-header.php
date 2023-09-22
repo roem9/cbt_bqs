@@ -15,7 +15,7 @@
                         <?php if($soal['tipe_soal'] == "TOEFL") :?>
                             <b><span style="font-size: 18px" id="waktu">&#8734;</span></b>
                         <?php else :?>
-                            <b><span style="font-size: 18px" id="waktu"><?= $tes['waktu']?> Menit</span></b>
+                            <b><span style="font-size: 18px" id="waktu">&#8734;</span></b>
                         <?php endif;?>
                     </div>
                 </div>
