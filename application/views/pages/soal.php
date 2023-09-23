@@ -29,7 +29,7 @@
                             </div>
                         </div>
                         <div class="form-footer">
-                            <button type="button" class="btn btn-primary w-100 btnSignIn">Masuk</button>
+                            <button type="button" class="btn btn-primary w-100 btnSignIn" style="display: none">Masuk</button>
                         </div>
                     <?php endif;?>
                 </div>
@@ -282,6 +282,11 @@
 <?php $this->load->view("_partials/footer")?>
 
 <script>
+    $(window).on('load', function() {
+        // Kode JavaScript Anda di sini akan dijalankan setelah seluruh halaman, termasuk gambar dan sumber daya lainnya, telah selesai dimuat.
+        $(".btnSignIn").show();
+    });
+
     $('.audio').on('timeupdate', function() {
         let id = $(this).data("id");
         $('#seekbar-'+id).attr("value", this.currentTime / this.duration);

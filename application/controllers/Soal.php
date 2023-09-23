@@ -113,6 +113,10 @@ class Soal extends CI_Controller {
                     <div class=\"form-floating mb-3\">
                         <input type=\"text\" name=\"nama\" class=\"form form-control required\">
                         <label for=\"nama\">Nama Lengkap</label>
+                    </div>
+                    <div class=\"form-floating mb-3\">
+                        <input type=\"text\" name=\"no_wa\" class=\"form form-control required\">
+                        <label for=\"no_wa\">No Whatsapp</label>
                     </div>";
             }
 
@@ -437,86 +441,99 @@ class Soal extends CI_Controller {
         
         $text = "";
 
+        $msgSesi = [];
+        $msgJudulSesi = [];
+        $msgSesiBenar = [];
+        $msgJumlahSoal = [];
+        $totalSoal = 0;
+        $rekap = "";
         
         $benar = 0;
         $salah = 0;
 
         for ($i=1; $i < $sesi+1; $i++) {
             $id = $id_sub[$i-1];
+
+            // kebutuhan rekap setiap sesi 
+            array_push($msgSesi, "Sesi $i");
+            $sesiBenar = 0;
+            $sesiSalah = 0;
+            $judulSesi = $this->db->query("SELECT nama_sub FROM sub_soal WHERE id_sub = $id")->row_array();
+            array_push($msgJudulSesi, $judulSesi['nama_sub']);
+
             $sub_soal = $this->Main_model->get_all("item_soal", ["id_sub" => $id, "item" => "soal"], 'urutan');
             $jawaban = $this->input->post("jawaban_sesi_".$i);
-            foreach ($sub_soal as $j => $sub_soal) {
+            foreach ($sub_soal as $j => $data_sub_soal) {
                 // from json to array 
-                $string = trim(preg_replace('/\s+/', ' ', $sub_soal['data']));
+                $string = trim(preg_replace('/\s+/', ' ', $data_sub_soal['data']));
                 $txt_soal = json_decode($string, true );
 
-                $sub_soal = $txt_soal['jawaban'];
-                if($sub_soal == $jawaban[$j]){
+                $data_sub_soal = $txt_soal['jawaban'];
+                if($data_sub_soal == $jawaban[$j]){
                     $status = "benar";
                     $benar++;
+
+                    $sesiBenar++;
                 } else {
                     $status = "salah";
                     $salah++;
+
+                    $sesiSalah++;
                 }
                 $no = $j+1;
                 $text .= '['.$i.','.$no.',"'.$jawaban[$j].'","'.$status.'"],';
             }
+
+            array_push($msgSesiBenar, $sesiBenar);
+            array_push($msgJumlahSoal, COUNT($sub_soal));
         }
 
-        
+        $msgSesiReplace = "Rekap poin setiap sesi </br>";
+        foreach ($msgSesi as $y => $msgSesi) {
+            $rekap .= "$msgSesi - $msgJudulSesi[$y] : $msgSesiBenar[$y] / $msgJumlahSoal[$y], ";
+            $msgSesiReplace .= "$msgSesi : $msgSesiBenar[$y] / $msgJumlahSoal[$y]</br>";
+
+            // total soal
+            $totalSoal += $msgJumlahSoal[$y];
+        }
+
+        // echo $msgSesiReplace;
+        // echo '<pre>' . print_r($msgSesi, true) . '</pre>';
+        // echo '<pre>' . print_r($msgSesiBenar, true) . '</pre>';
+        // echo '<pre>' . print_r($msgJumlahSoal, true) . '</pre>';
+        // exit();
+
+
         $text = substr($text, 0, -1);
         $text = '{"jawaban":['.$text.']}';
+        $poin = number_format((($benar / $totalSoal) * 10), 2);
 
         $data = [
             "id_tes" => $tes['id_tes'],
             "nama" => $this->input->post("nama"),
             "email" => $this->input->post("email"),
-            "nilai" => $benar,
+            "nilai" => $poin,
             "text" => $text,
+            "rekap_sesi" => $rekap,
+            "no_wa" => $this->input->post("no_wa")
         ];
 
         $this->Main_model->add_data("peserta", $data);
-        $poin = $benar * $soal['poin'];
+        // $poin = $benar * $soal['poin'];
 
         $replacements = array(
             '$poin' => $poin,
             '$email' => $this->input->post("email"),
+            '$no_wa' => $this->input->post("no_wa"),
             '$nama' => $this->input->post("nama"),
             '$tes' => $tes['nama_tes'],
             '$tgl_tes' => tgl_indo($tes["tgl_tes"], "lengkap"),
             '$tgl_pengumuman' => tgl_indo($tes["tgl_pengumuman"], "lengkap"),
+            '$rekap_sesi' => $msgSesiReplace,
         );
 
-        if($soal['tipe_soal'] == "Placement Test"){
-            $msg = "<p>Halo Kak!.</p><p>Terima kasih telah mengerjakan Placement Test. Menurut hasil Placement Test, kami menyarankan kakak untuk masuk ke kelas ";
-            if($benar >= 0 && $benar < 6){
-                $level = "Grammar 1";
-                $msg .= "<b>Grammar 1</b>";
-            } else if($benar >= 6 && $benar < 11){
-                $level = "Grammar 2";
-                $msg .= "<b>Grammar 2</b>";
-            } else if($benar >= 11 && $benar < 16){
-                $level = "Preparation";
-                $msg .= "<b>Preparation</b>";
-            } else if($benar >= 16){
-                $level = "Advanced";
-                $msg .= "<b>Advanced</b>";
-            }
-
-            $no_wa = $config[3]['value'];
-
-            $replace_wa = array(
-                ' ' => '%20',
-                '"' => '%22'
-            );
-    
-            $nama = str_replace(array_keys($replace_wa), $replace_wa, $this->input->post("nama"));
-            
-            $msg .= " di TOEFL Warrior.</p>Untuk detail kelasnya, akan dijelaskan oleh admin ya! Pastikan kakak menghubungi admin untuk berkonsultasi lebih lanjut tentang program yang akan kakak ambil.<p>Urutan level belajar di TOEFL Warrior : </p> <center><img src='".base_url()."/assets/img/level.jpg?t=".time()."' width=500 class='img-fluid mb-3'></center><p>Untuk menghubungi admin, silakan klik link ini / chat melalui nomor ini : <a target='_blank' href='https://wa.me/".$no_wa."?text=Halo%20Kak%2C%20saya%20".$nama."%20telah%20mengikuti%20Placement%20Test%20dengan%20hasil%20masuk%20ke%20kelas%20".$level.".%20Mohon%20info%20detail%20programnya.'>".$no_wa."</a></p>";
-
-        } else {
-            $msg = str_replace(array_keys($replacements), $replacements, $tes['msg']);
-        }
+        
+        $msg = str_replace(array_keys($replacements), $replacements, $tes['msg']);
 
         $this->session->set_flashdata('pesan', $msg);
 
