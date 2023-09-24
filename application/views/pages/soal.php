@@ -265,7 +265,7 @@
 
                     </div>
                 </div>
-                <?php $this->load->view("_partials/footer-bar")?>
+                <!-- <?php $this->load->view("_partials/footer-bar")?> -->
             </div>
         </div>
     </div>
