@@ -431,7 +431,7 @@
 
             // untuk cek apa ada jawaban yang belum terjawab
             jumlah_soal = $(`[name='sesi-${sesi}']`).val();
-            console.log(jumlah_soal)
+            // console.log(jumlah_soal)
 
             if($('#sesi-'+sesi+' input:radio:checked').length != jumlah_soal){
             
@@ -489,10 +489,18 @@
 
     $(".btnSimpan").click(function(){
         let id = $(this).data("id");
-        jumlah_soal = $("[name='"+id+"']").val();
+        // jumlah_soal = $("[name='"+id+"']").val();
 
-        sesi = id.replace("sesi-", "");
-        sesi = parseInt(sesi-1);
+        // sesi = id.replace("sesi-", "");
+        // sesi = parseInt(sesi-1);
+
+        no_sesi = id.replace("sesi-", "");
+        sesi = parseInt(no_sesi-1);
+        // console.log(sesi)
+
+        // untuk cek apa ada jawaban yang belum terjawab
+        jumlah_soal = $(`[name='sesi-${sesi}']`).val();
+        // console.log(jumlah_soal)
 
         if($('#sesi-'+sesi+' input:radio:checked').length != jumlah_soal){
         
