@@ -16,7 +16,6 @@
             </div>
           </div>
         </div>
-        <?php $this->load->view("_partials/footer-bar")?>
       </div>
     </div>
 <?php $this->load->view("_partials/footer")?>

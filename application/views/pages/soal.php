@@ -8,7 +8,7 @@
                     </div>
                     <h2 class="card-title text-center mb-4"><?= $title?></h2>
                     <?php if( $this->session->flashdata('pesan') ) : ?>
-                        <?= $this->session->flashdata('pesan')?>
+                        <?= $this->session->flashdata('pesan')['msg']?>
                     <?php else: ?>
                         <div class="mb-2">
                             <label class="form-label">
@@ -558,7 +558,11 @@
 
             if(no_sesi != <?= $jumlah_sesi?>){
 
-                clearInterval(countDown);
+                // clearInterval(countDown);
+                if(typeof countDown != 'undefined'){
+                    clearInterval(countDown);
+                }
+
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
@@ -576,7 +580,11 @@
                     $("#transisi-sesi-" + (parseInt(no_sesi) + parseInt(1))).show();
                 })
             } else if(no_sesi == <?= $jumlah_sesi?>){
-                clearInterval(countDown);
+                // clearInterval(countDown);
+
+                if(typeof countDown != 'undefined'){
+                    clearInterval(countDown);
+                }
 
                 // scroll to top 
                 if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
@@ -642,7 +650,10 @@
                 // show sesi 
                 $("#transisi-sesi-" + (parseInt(sesi) + 1)).show();
             } else if(no_sesi == <?= $jumlah_sesi?>){
-                clearInterval(countDown);
+                // clearInterval(countDown);
+                if(typeof countDown != 'undefined'){
+                    clearInterval(countDown);
+                }
 
                 // scroll to top 
                 if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {

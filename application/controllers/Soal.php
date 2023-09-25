@@ -191,7 +191,11 @@ class Soal extends CI_Controller {
                     $data['sesi'][$i]['tipe_soal'] = $dataSesi['tipe_soal'];
                     $data['sesi'][$i]['banner'] = $dataSesi['banner'];
 
-                    if($dataSesi['isaudio']){
+                    // cek apakah soal memiliki audio atau tidak. jika ada audio maka putar automatis 
+                    $isaudio = $this->db->query("SELECT COUNT(*) as isaudio FROM item_soal WHERE id_sub = $sesi[id_sub] AND item = 'audio'")->row_array();
+
+                    if(!empty($isaudio) && $isaudio['isaudio'] > 0)
+                    {
                         $data['sesi'][$i]['startSoal'] = 1;
                     } else {
                         $data['sesi'][$i]['startSoal'] = 0;
@@ -521,6 +525,17 @@ class Soal extends CI_Controller {
         $this->Main_model->add_data("peserta", $data);
         // $poin = $benar * $soal['poin'];
 
+        $replace_wa = array(
+            ' ' => '%20',
+            '"' => '%22',
+            '#' => '%23',
+            "'" => '%27' // Adding ' character
+        );
+
+        $nama_tes = str_replace(array_keys($replace_wa), $replace_wa, $tes['nama_tes']);
+        $nama = str_replace(array_keys($replace_wa), $replace_wa, $this->input->post("nama"));
+        $tgl_tes = date("d-M-Y", strtotime($tes['tgl_tes']));
+
         $replacements = array(
             '$poin' => $poin,
             '$email' => $this->input->post("email"),
@@ -530,12 +545,13 @@ class Soal extends CI_Controller {
             '$tgl_tes' => tgl_indo($tes["tgl_tes"], "lengkap"),
             '$tgl_pengumuman' => tgl_indo($tes["tgl_pengumuman"], "lengkap"),
             '$rekap_sesi' => $msgSesiReplace,
+            '$link' => "<a target='_blank' href='https://wa.me/+".$config[3]['value']."?text=Assalamualaikum%20Admin%2C%20Saya%20{$nama}%20telah%20mengikuti%20{$nama_tes}%20{$tgl_tes}'>Hubungi Admin</a>",
         );
 
-        
         $msg = str_replace(array_keys($replacements), $replacements, $tes['msg']);
+        $data['msg'] = $msg;
 
-        $this->session->set_flashdata('pesan', $msg);
+        $this->session->set_flashdata('pesan', $data);
 
         redirect(base_url("soal/id/".$id_tes), $data);
     }
