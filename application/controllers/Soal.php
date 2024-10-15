@@ -569,6 +569,10 @@ class Soal extends CI_Controller
             $poin = ($msgSesiBenar[0] * 5) + ($msgSesiBenar[1] * 5) + $msgSesiBenar[2];
 
             $msgSesiReplace .= "Total Skor SKD = $poin";
+        } else if ($tes['tipe_tes'] == 'Tes Standard') {
+            $poin = round(($benar / $totalSoal) * 100);
+
+            $msgSesiReplace .= "Total Skor = $poin";
         }
 
 
